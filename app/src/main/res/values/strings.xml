@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">BusinessMonefy</string>
+    <string name="total">TOTAL: </string>
+    <string name="showGraphics">SHOW GRAPHICS</string>
 </resources>
