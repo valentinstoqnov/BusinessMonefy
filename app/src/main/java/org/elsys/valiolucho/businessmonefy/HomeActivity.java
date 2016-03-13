@@ -3,9 +3,14 @@ package org.elsys.valiolucho.businessmonefy;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewAnimationUtils;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.PopupWindow;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -21,6 +26,10 @@ public class HomeActivity extends AppCompatActivity {
     private static Button showLogsButton;
     private static ImageButton plusImageButton;
     private static ImageButton minusImageButton;
+    private PopupWindow plusPopUpWindow;
+    private LayoutInflater plusLayoutInFlatter;
+    private PopupWindow minusPopUpWindow;
+    private LayoutInflater minusLayoutInFlatter;
 
     public void onClickButtonListeners(){
         showGraphicsButton = (Button) findViewById(R.id.buttonShowGraphics);
@@ -45,7 +54,19 @@ public class HomeActivity extends AppCompatActivity {
         plusImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                plusLayoutInFlatter = (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+                ViewGroup container = (ViewGroup) plusLayoutInFlatter.inflate(R.layout.plusLayout, null);
+                //400,400 must found formula !
+                plusPopUpWindow = new PopupWindow(container,400,400);
+                plusPopUpWindow.showAtLocation(plusLinearLayout);
 
+                container.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        plusPopUpWindow.dismiss();
+                        return true;
+                    }
+                });
             }
         });
 
@@ -53,7 +74,19 @@ public class HomeActivity extends AppCompatActivity {
         minusImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                minusLayoutInFlatter = (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+                ViewGroup container = (ViewGroup) minusLayoutInFlatter.inflate(R.layout.minusLayout, null);
+                //400,400 must found formula !
+                minusPopUpWindow = new PopupWindow(container,400,400);
+                minusPopUpWindow.showAtLocation(minusLinearLayout);
 
+                container.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        minusPopUpWindow.dismiss();
+                        return true;
+                    }
+                });
             }
         });
     }
