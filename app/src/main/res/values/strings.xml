@@ -2,4 +2,7 @@
     <string name="app_name">BusinessMonefy</string>
     <string name="total">TOTAL: </string>
     <string name="showGraphics">SHOW GRAPHICS</string>
+    <string name="showLogs">SHOW LOGS</string>
+    <string name="title_activity_graphics">GraphicsActivity</string>
+    <string name="title_activity_logs">LogsActivity</string>
 </resources>
