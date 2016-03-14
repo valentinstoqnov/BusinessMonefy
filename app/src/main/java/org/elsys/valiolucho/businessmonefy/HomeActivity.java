@@ -14,14 +14,6 @@ import android.widget.PopupWindow;
 
 public class HomeActivity extends AppCompatActivity {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-        onClickButtonListeners();
-    }
-
-    //make SHOW GRAPHICS and SHOW LOGS buttons, initialization and set onClickListener
     private static Button showGraphicsButton;
     private static Button showLogsButton;
 
@@ -34,6 +26,14 @@ public class HomeActivity extends AppCompatActivity {
     private PopupWindow minusPopUpWindow;
     private LayoutInflater minusLayoutInFlatter;
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_home);
+        onClickButtonListeners();
+    }
+
+    //make SHOW GRAPHICS and SHOW LOGS buttons, initialization and set onClickListener
     public void onClickButtonListeners(){
         showGraphicsButton = (Button) findViewById(R.id.buttonShowGraphics);
         showGraphicsButton.setOnClickListener(new View.OnClickListener() {
