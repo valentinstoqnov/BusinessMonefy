@@ -7,38 +7,31 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 
 public class HomeActivity extends AppCompatActivity {
 
-    private static Button showGraphicsButton;
-    private static Button showLogsButton;
+    private Button showGraphicsButton;
+    private Button showLogsButton;
 
-    private static ImageButton plusImageButton;
-    private static ImageButton minusImageButton;
-
-    private PopupWindow plusPopUpWindow;
-    private LayoutInflater plusLayoutInFlatter;
-    private LinearLayout plusLayout;
-
-    private PopupWindow minusPopUpWindow;
-    private LayoutInflater minusLayoutInFlatter;
-    private LinearLayout minusLayout;
+    private ImageButton plusImageButton;
+    private ImageButton minusImageButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         onClickButtonListeners();
+        onClickImageButtonsListeners();
     }
 
     //make SHOW GRAPHICS and SHOW LOGS buttons, initialization and set onClickListener
-    public void onClickButtonListeners(){
+    private void onClickButtonListeners() {
         showGraphicsButton = (Button) findViewById(R.id.buttonShowGraphics);
         showGraphicsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,48 +49,24 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(logsActivityIntent);
             }
         });
+    }
 
+    private void onClickImageButtonsListeners() {
         plusImageButton = (ImageButton) findViewById(R.id.imageButtonPlus);
         plusImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                plusLayoutInFlatter = (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-                ViewGroup container = (ViewGroup) plusLayoutInFlatter.inflate(R.layout.plus_layout, null);
-                plusLayout = (LinearLayout) findViewById(R.id.plusLinearLayout);
-
-                //400,400 must found formula !
-                plusPopUpWindow = new PopupWindow(container,400,400);
-                plusPopUpWindow.showAtLocation(plusLayout, Gravity.NO_GRAVITY,500,500);
-
-                container.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        plusPopUpWindow.dismiss();
-                        return true;
-                    }
-                });
+                Intent plusActivityIntent = new Intent(HomeActivity.this, PlusActivity.class);
+                startActivity(plusActivityIntent);
             }
         });
 
-        minusImageButton = (ImageButton) findViewById(R.id.imageButtonPlus);
+        minusImageButton = (ImageButton) findViewById(R.id.imageButtonMinus);
         minusImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                minusLayoutInFlatter = (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-                ViewGroup container = (ViewGroup) minusLayoutInFlatter.inflate(R.layout.minus_layout, null);
-                minusLayout = (LinearLayout) findViewById(R.id.minusLinearLayout);
-
-                //400,400 must found formula !
-                minusPopUpWindow = new PopupWindow(container,400,400);
-                minusPopUpWindow.showAtLocation(minusLayout,Gravity.NO_GRAVITY,500,500);
-
-                container.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        minusPopUpWindow.dismiss();
-                        return true;
-                    }
-                });
+                Intent minusActivityIntent = new Intent(HomeActivity.this, MinusActivity.class);
+                startActivity(minusActivityIntent);
             }
         });
     }

@@ -5,4 +5,6 @@
     <string name="showLogs">SHOW LOGS</string>
     <string name="title_activity_graphics">GraphicsActivity</string>
     <string name="title_activity_logs">LogsActivity</string>
+    <string name="title_activity_plus">PlusActivity</string>
+    <string name="title_activity_minus">MinusActivity</string>
 </resources>

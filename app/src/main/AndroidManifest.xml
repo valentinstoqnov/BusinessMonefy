@@ -18,10 +18,26 @@
         <activity
             android:name=".GraphicsActivity"
             android:label="@string/title_activity_graphics"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".LogsActivity"
             android:label="@string/title_activity_logs"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".PlusActivity"
+            android:label="@string/title_activity_plus"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="org.elsys.valiolucho.b.MinusActivity"
+            android:label="@string/title_activity_minus"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="org.elsys.valiolucho.bus.MinusActivity"
+            android:label="@string/title_activity_minus"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".MinusActivity"
+            android:label="@string/title_activity_minus"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
