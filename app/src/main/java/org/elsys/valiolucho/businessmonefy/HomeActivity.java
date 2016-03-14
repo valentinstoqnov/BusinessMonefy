@@ -24,10 +24,13 @@ public class HomeActivity extends AppCompatActivity {
     //make SHOW GRAPHICS and SHOW LOGS buttons, initialization and set onClickListener
     private static Button showGraphicsButton;
     private static Button showLogsButton;
+
     private static ImageButton plusImageButton;
     private static ImageButton minusImageButton;
+
     private PopupWindow plusPopUpWindow;
     private LayoutInflater plusLayoutInFlatter;
+
     private PopupWindow minusPopUpWindow;
     private LayoutInflater minusLayoutInFlatter;
 
@@ -56,6 +59,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onClick(View v) {
                 plusLayoutInFlatter = (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
                 ViewGroup container = (ViewGroup) plusLayoutInFlatter.inflate(R.layout.plusLayout, null);
+
                 //400,400 must found formula !
                 plusPopUpWindow = new PopupWindow(container,400,400);
                 plusPopUpWindow.showAtLocation(plusLinearLayout);
