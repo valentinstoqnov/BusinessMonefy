@@ -3,6 +3,7 @@ package org.elsys.valiolucho.businessmonefy;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 
 public class HomeActivity extends AppCompatActivity {
@@ -22,9 +24,11 @@ public class HomeActivity extends AppCompatActivity {
 
     private PopupWindow plusPopUpWindow;
     private LayoutInflater plusLayoutInFlatter;
+    private LinearLayout plusLayout;
 
     private PopupWindow minusPopUpWindow;
     private LayoutInflater minusLayoutInFlatter;
+    private LinearLayout minusLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +43,7 @@ public class HomeActivity extends AppCompatActivity {
         showGraphicsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent graphicsActivityIntent = new Intent(HomeActivity.this, GraphicsActivity.class);﻿
+                Intent graphicsActivityIntent = new Intent(HomeActivity.this, GraphicsActivity.class);
                 startActivity(graphicsActivityIntent);
             }
         });
@@ -48,7 +52,7 @@ public class HomeActivity extends AppCompatActivity {
         showLogsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent logsActivityIntent = new Intent(HomeActivity.this, LogsActivity.class);﻿
+                Intent logsActivityIntent = new Intent(HomeActivity.this, LogsActivity.class);
                 startActivity(logsActivityIntent);
             }
         });
@@ -58,11 +62,12 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 plusLayoutInFlatter = (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-                ViewGroup container = (ViewGroup) plusLayoutInFlatter.inflate(R.layout.plusLayout, null);
+                ViewGroup container = (ViewGroup) plusLayoutInFlatter.inflate(R.layout.plus_layout, null);
+                plusLayout = (LinearLayout) findViewById(R.id.plusLinearLayout);
 
                 //400,400 must found formula !
                 plusPopUpWindow = new PopupWindow(container,400,400);
-                plusPopUpWindow.showAtLocation(plusLinearLayout);
+                plusPopUpWindow.showAtLocation(plusLayout, Gravity.NO_GRAVITY,500,500);
 
                 container.setOnTouchListener(new View.OnTouchListener() {
                     @Override
@@ -79,10 +84,12 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 minusLayoutInFlatter = (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-                ViewGroup container = (ViewGroup) minusLayoutInFlatter.inflate(R.layout.minusLayout, null);
+                ViewGroup container = (ViewGroup) minusLayoutInFlatter.inflate(R.layout.minus_layout, null);
+                minusLayout = (LinearLayout) findViewById(R.id.minusLinearLayout);
+
                 //400,400 must found formula !
                 minusPopUpWindow = new PopupWindow(container,400,400);
-                minusPopUpWindow.showAtLocation(minusLinearLayout);
+                minusPopUpWindow.showAtLocation(minusLayout,Gravity.NO_GRAVITY,500,500);
 
                 container.setOnTouchListener(new View.OnTouchListener() {
                     @Override
