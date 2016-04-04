@@ -19,8 +19,7 @@
         android:ems="10"
         android:id="@+id/pNameEditText"
         android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="85dp" />
+        android:layout_alignParentEnd="true" />
 
     <EditText
         android:layout_width="match_parent"
