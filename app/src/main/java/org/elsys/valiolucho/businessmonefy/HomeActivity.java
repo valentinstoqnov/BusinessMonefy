@@ -14,6 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 
+import org.elsys.valiolucho.calculator.CalcActivity;
+
 public class HomeActivity extends AppCompatActivity {
 
     private Button showGraphicsButton;
@@ -56,7 +58,7 @@ public class HomeActivity extends AppCompatActivity {
         plusImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent plusActivityIntent = new Intent(HomeActivity.this, PlusActivity.class);
+                Intent plusActivityIntent = new Intent(HomeActivity.this, CalcActivity.class);
                 startActivity(plusActivityIntent);
             }
         });

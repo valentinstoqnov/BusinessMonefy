@@ -21,43 +21,34 @@
         android:layout_height="wrap_content">
 
         <EditText
-            android:textAlignment="textEnd"
             android:layout_width="match_parent"
-            android:layout_gravity="center_horizontal"
             android:layout_height="wrap_content"
-            android:textSize="@string/txtSize"
-            android:id="@+id/calcDisplay"
-            android:hint="@string/zero"/>
+            android:id="@+id/calcDisplay" />
 
         <LinearLayout
 
             android:id="@+id/sen"
-            style="?android:attr/buttonBarStyle"
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <Button
-                android:textSize="@string/txtSize"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="?android:attr/buttonBarButtonStyle"
                 android:text="@string/seven"
                 android:id="@+id/buttonSeven"/>
 
             <Button
-                android:textSize="@string/txtSize"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="?android:attr/buttonBarButtonStyle"
+
                 android:text="@string/eight"
                 android:id="@+id/buttonEight"/>
 
             <Button
-                android:textSize="@string/txtSize"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="?android:attr/buttonBarButtonStyle"
+
                 android:text="@string/nine"
                 android:id="@+id/buttonNine"/>
 
@@ -67,188 +58,158 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/buttonDelete"
                 android:text="@string/delete"
-                style="?android:attr/buttonBarButtonStyle"/>
+                />
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/ffs"
-            style="?android:attr/buttonBarStyle"
+
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <Button
-                android:textSize="@string/txtSize"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="?android:attr/buttonBarButtonStyle"
+
                 android:text="@string/four"
                 android:id="@+id/buttonFour"/>
 
             <Button
-                android:textSize="@string/txtSize"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="?android:attr/buttonBarButtonStyle"
+
                 android:text="@string/five"
                 android:id="@+id/buttonFive"/>
 
             <Button
-                android:textSize="@string/txtSize"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="?android:attr/buttonBarButtonStyle"
+
                 android:text="@string/six"
                 android:id="@+id/buttonSix"/>
 
             <Button
-                android:textSize="@string/txtSize"
                 android:id="@+id/buttonBackspace"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/backspace"
-                style="?android:attr/buttonBarButtonStyle"/>
+                />
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/ott"
-            style="?android:attr/buttonBarStyle"
+
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <Button
-                android:textSize="@string/txtSize"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="?android:attr/buttonBarButtonStyle"
+
                 android:text="@string/one"
                 android:id="@+id/buttonOne"/>
 
             <Button
-                android:textSize="@string/txtSize"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/two"
-                style="?android:attr/buttonBarButtonStyle"
+
                 android:id="@+id/buttonTwo"/>
 
             <Button
-                android:textSize="@string/txtSize"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="?android:attr/buttonBarButtonStyle"
+
                 android:text="@string/three"
                 android:id="@+id/buttonThree"/>
 
             <Button
-                android:textSize="@string/txtSize"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/buttonMinus"
                 android:text="@string/minus"
-                style="?android:attr/buttonBarButtonStyle"/>
+                />
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@string/txtSize"
-                android:id="@+id/buttonDivide"
-                android:text="@string/divide"
-                style="?android:attr/buttonBarButtonStyle"/>
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/zpp"
-            style="?android:attr/buttonBarStyle"
+
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <Button
-                android:textSize="@string/txtSize"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="?android:attr/buttonBarButtonStyle"
+
                 android:text="@string/zero"
                 android:id="@+id/buttonZero"/>
 
             <Button
-                android:textSize="@string/txtSize"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="?android:attr/buttonBarButtonStyle"
+
                 android:text="@string/point"
                 android:id="@+id/buttonPoint"/>
 
             <Button
-                android:textSize="@string/txtSize"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/buttonPercent"
-                android:text="@string/percent"
-                style="?android:attr/buttonBarButtonStyle"/>
+                android:id="@+id/buttonDivide"
+                android:text="@string/divide"
+                />
 
             <Button
-                android:textSize="@string/txtSize"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/buttonPlus"
                 android:text="@string/plus"
-                style="?android:attr/buttonBarButtonStyle"/>
+                />
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@string/txtSize"
-                android:id="@+id/buttonMultiply"
-                android:text="@string/multiply"
-                style="?android:attr/buttonBarButtonStyle"/>
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/snd"
-            style="?android:attr/buttonBarStyle"
-            android:layout_gravity="right"
+
+            android:layout_gravity="end"
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <Button
-                android:textSize="20sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/buttonSquareRoot"
-                android:text="@string/square_root"
-                style="?android:attr/buttonBarButtonStyle" />
+                android:id="@+id/buttonMultiply"
+                android:text="@string/multiply"
+                />
 
             <Button
-                android:textSize="@string/txtSize"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/buttonNegative"
                 android:text="@string/negative"
-                style="?android:attr/buttonBarButtonStyle"/>
+                />
 
             <Button
-                android:textSize="@string/txtSize"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/buttonGradiation"
                 android:text="@string/gradiation"
-                style="?android:attr/buttonBarButtonStyle"/>
+                />
 
             <Button
-                android:textSize="@string/txtSize"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/buttonEqual"
                 android:text="@string/equals"
-                style="?android:attr/buttonBarButtonStyle"/>
+                />
 
         </LinearLayout>
     </LinearLayout>
@@ -262,7 +223,7 @@
         android:background="@android:color/black" />
 
     <LinearLayout
-        style="?android:attr/buttonBarStyle"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -271,18 +232,27 @@
         android:layout_below="@id/line">
 
         <Button
-            style="?android:attr/buttonBarButtonStyle"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/buttonCancel"
             android:text="@string/cancel"/>
 
         <Button
-            style="?android:attr/buttonBarButtonStyle"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/buttonOk"
             android:text="@string/okey"/>
     </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:hint="@string/zero"
+        android:id="@+id/textView"
+        android:layout_above="@+id/ll1"
+        android:layout_alignEnd="@+id/ll1" />
 
 </RelativeLayout>
