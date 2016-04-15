@@ -14,6 +14,7 @@ import org.elsys.valiolucho.businessmonefy.R;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -76,14 +77,14 @@ public class CalcActivity extends AppCompatActivity {
     private double calculate() {
         Calculator calculator = new Calculator(numBuff);
         double result = 0.0;
-        switch (operation) {
+        /*switch (operation) {
             case "sqrt" :
                 result = calculator.sqrt();
                 break;
-            case "neg" :
+            case "neg" :*/
                 result = calculator.neg();
-                break;
-        }
+               // break;
+        //}
         return result;
     }
 
@@ -94,7 +95,7 @@ public class CalcActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             String viewDisplayCurr = viewDisplay.getText().toString();
-
+            //String vdisp = viewDisplay.getText().toString();
             switch (v.getId()){
                 case R.id.buttonDelete :
                     calcDisplay.setText("");
@@ -118,6 +119,9 @@ public class CalcActivity extends AppCompatActivity {
                     break;
                 case R.id.buttonPoint :
                     String displayCurr = calcDisplay.getText().toString();
+                    if(displayCurr.equals("")) {
+                        displayCurr += "0";
+                    }
                     displayCurr += '.';
                     calcDisplay.setText(displayCurr);
 
@@ -125,50 +129,86 @@ public class CalcActivity extends AppCompatActivity {
                     viewDisplay.setText(viewDisplayCurr);
                     break;
                 case R.id.buttonPlus :
+                    //String vdisp = viewDisplay.getText().toString();
                     try{
                         numBuff = Double.parseDouble(calcDisplay.getText().toString());
                     }catch (NumberFormatException nfe) {
-                        numBuff = Double.parseDouble(viewDisplay.getText().toString());
+                        Pattern pattern = Pattern.compile("\\d+|-\\d+");
+                        Matcher matcher = pattern.matcher(viewDisplayCurr);
+                        if(matcher.matches()) {
+                            numBuff = Double.parseDouble(viewDisplayCurr);
+                        }else{
+                            numBuff = 0;
+                            viewDisplayCurr = "0";
+                        }
                     }
                     operation = "+";
-                    viewDisplayCurr = String.format("%s%s", viewDisplay.getText().toString(), operation);
+                    viewDisplayCurr = String.format("%s%s", viewDisplayCurr, operation);
                     viewDisplay.setText(viewDisplayCurr);
+                    calcDisplay.setText("");
                     operationFlag = true;
                     break;
                 case R.id.buttonMinus :
+                    //String vdisp = viewDisplay.getText().toString();
                     try{
                         numBuff = Double.parseDouble(calcDisplay.getText().toString());
                     }catch (NumberFormatException nfe) {
-                        numBuff = Double.parseDouble(viewDisplay.getText().toString());
+                        Pattern pattern = Pattern.compile("\\d+|-\\d+");
+                        Matcher matcher = pattern.matcher(viewDisplayCurr);
+                        if(matcher.matches()) {
+                            numBuff = Double.parseDouble(viewDisplayCurr);
+                        }else{
+                            numBuff = 0;
+                            viewDisplayCurr = "0";
+                        }
                     }
                     operation = "-";
 
-                    viewDisplayCurr = String.format("%s%s", viewDisplay.getText().toString(), operation);
+                    viewDisplayCurr = String.format("%s%s", viewDisplayCurr, operation);
                     viewDisplay.setText(viewDisplayCurr);
+                    calcDisplay.setText("");
                     operationFlag = true;
                     break;
                 case R.id.buttonMultiply :
+                    //String vdisp = viewDisplay.getText().toString();
                     try{
                         numBuff = Double.parseDouble(calcDisplay.getText().toString());
                     }catch (NumberFormatException nfe) {
-                        numBuff = Double.parseDouble(viewDisplay.getText().toString());
+                        Pattern pattern = Pattern.compile("\\d+");
+                        Matcher matcher = pattern.matcher(viewDisplayCurr);
+                        if(matcher.matches()) {
+                            numBuff = Double.parseDouble(viewDisplayCurr);
+                        }else{
+                            numBuff = 0;
+                            viewDisplayCurr = "0";
+                        }
                     }
                     operation = "*";
 
-                    viewDisplayCurr = String.format("%s%s", viewDisplay.getText().toString(), operation);
+                    viewDisplayCurr = String.format("%s%s", viewDisplayCurr, operation);
                     viewDisplay.setText(viewDisplayCurr);
                     operationFlag = true;
+                    calcDisplay.setText("");
                     break;
                 case R.id.buttonDivide :
+                    //String vdisp = viewDisplay.getText().toString();
                     try{
                         numBuff = Double.parseDouble(calcDisplay.getText().toString());
                     }catch (NumberFormatException nfe) {
-                        numBuff = Double.parseDouble(viewDisplay.getText().toString());
+                        Pattern pattern = Pattern.compile("\\d+|-\\d+");
+                        Matcher matcher = pattern.matcher(viewDisplayCurr);
+                        if(matcher.matches()) {
+                            numBuff = Double.parseDouble(viewDisplayCurr);
+                        }else{
+                            numBuff = 0;
+                            viewDisplayCurr = "0";
+                        }
                     }
                     operation = "/";
 
-                    viewDisplayCurr = String.format("%s%s", viewDisplay.getText().toString(), operation);
+                    viewDisplayCurr = String.format("%s%s", viewDisplayCurr, operation);
                     viewDisplay.setText(viewDisplayCurr);
+                    calcDisplay.setText("");
                     operationFlag = true;
                     break;
                 /*case R.id.buttonPercent :
@@ -197,17 +237,17 @@ public class CalcActivity extends AppCompatActivity {
                     break;*/
                 case R.id.buttonEqual :
                     double secondBuff = 0.0;
-                    try{
-                        secondBuff = Double.parseDouble(calcDisplay.getText().toString());
-                    }catch (NumberFormatException nfe) {
-                        String msg = String.format("Can not <%s>, <%s> with <%s>", operation, Double.toString(numBuff), calcDisplay.getText().toString());
-                        calcDisplay.setText(msg);
-                    }
-                    double result;
-                    if(numBuff == secondBuff) {
+                    double result = 0.0;
+                    if(operation.equals("neg")) {
                         result = calculate();
                     }else{
-                        result = calculate(secondBuff);
+                        try {
+                            secondBuff = Double.parseDouble(calcDisplay.getText().toString());
+                            result = calculate(secondBuff);
+                        } catch (NumberFormatException nfe) {
+                            String msg = String.format("Can not <%s>, <%s> with <%s>", operation, Double.toString(numBuff), calcDisplay.getText().toString());
+                            calcDisplay.setText(msg);
+                        }
                     }
                     DecimalFormat df = new DecimalFormat("###.#");
                     calcDisplay.setText("");
@@ -216,41 +256,52 @@ public class CalcActivity extends AppCompatActivity {
                     equalFlag = true;
                     break;
                 case R.id.buttonGradiation :
+                    //String vdisp = viewDisplay.getText().toString();
                     try{
                         numBuff = Double.parseDouble(calcDisplay.getText().toString());
                     }catch (NumberFormatException nfe) {
-                        numBuff = Double.parseDouble(viewDisplay.getText().toString());
+                        Pattern pattern = Pattern.compile("\\d+|-\\d+");
+                        Matcher matcher = pattern.matcher(viewDisplayCurr);
+                        if(matcher.matches()) {
+                            numBuff = Double.parseDouble(viewDisplayCurr);
+                        }else{
+                            numBuff = 0;
+                            viewDisplayCurr = "0";
+                        }
                     }
                     operation = "^";
 
-                    viewDisplayCurr = String.format("%s^%s", viewDisplay.getText().toString(), operation);
+                    viewDisplayCurr = String.format("%s%s", viewDisplayCurr, operation);
                     viewDisplay.setText(viewDisplayCurr);
+                    calcDisplay.setText("");
                     operationFlag = true;
                     break;
                 case R.id.buttonNegative :
                     try{
                         numBuff = Double.parseDouble(calcDisplay.getText().toString());
                     }catch (NumberFormatException nfe) {
-                        numBuff = Double.parseDouble(viewDisplay.getText().toString());
+                        Pattern pattern = Pattern.compile("\\d+|-\\d+");
+                        Matcher matcher = pattern.matcher(viewDisplayCurr);
+                        if(matcher.matches()) {
+                            numBuff = Double.parseDouble(viewDisplayCurr);
+                        }else{
+                            numBuff = 0;
+                            viewDisplayCurr = "0";
+                        }
                     }
                     operation = "neg";
 
-                    viewDisplayCurr = String.format("%s(%s)", operation, viewDisplay.getText().toString());
+                    viewDisplayCurr = String.format("%s(%s)", operation, viewDisplayCurr);
                     viewDisplay.setText(viewDisplayCurr);
+                    calcDisplay.setText("");
                     operationFlag = true;
                     break;
                 default :
 
-                    if(equalFlag) {
+                    if(equalFlag || operationFlag) {
                         viewDisplay.setText("");
                         equalFlag = false;
-                    }
-                    if(operationFlag) {
-                        calcDisplay.setText("");
                         operationFlag = false;
-                    }
-                    if ("".equals(operation)) {
-                        calcDisplay.setText("");
                     }
 
                     String num = ((Button) v).getText().toString();
