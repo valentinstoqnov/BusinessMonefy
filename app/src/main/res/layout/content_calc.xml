@@ -20,10 +20,47 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/LLTxtViews">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/currencyTextView"
+                android:textStyle="bold"
+                android:textSize="25sp"
+                android:hint="$" />
+
+            <TextView
+                android:textSize="25sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView"
+                android:textStyle="bold"
+                android:gravity="center_horizontal"/>
+
+        </LinearLayout>
+
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/calcDisplay" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Name"
+            android:id="@+id/NameEditText" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/DescriptionEditText"
+            android:hint="Description" />
 
         <LinearLayout
 
@@ -33,12 +70,14 @@
             android:layout_height="wrap_content">
 
             <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/seven"
                 android:id="@+id/buttonSeven"/>
 
             <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
@@ -46,6 +85,7 @@
                 android:id="@+id/buttonEight"/>
 
             <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
@@ -53,7 +93,7 @@
                 android:id="@+id/buttonNine"/>
 
             <Button
-                android:textSize="20sp"
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/buttonDelete"
@@ -70,6 +110,7 @@
             android:layout_height="wrap_content">
 
             <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
@@ -77,6 +118,7 @@
                 android:id="@+id/buttonFour"/>
 
             <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
@@ -84,6 +126,7 @@
                 android:id="@+id/buttonFive"/>
 
             <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
@@ -91,6 +134,7 @@
                 android:id="@+id/buttonSix"/>
 
             <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:id="@+id/buttonBackspace"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -107,6 +151,7 @@
             android:layout_height="wrap_content">
 
             <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
@@ -114,6 +159,7 @@
                 android:id="@+id/buttonOne"/>
 
             <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/two"
@@ -121,6 +167,7 @@
                 android:id="@+id/buttonTwo"/>
 
             <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
@@ -128,6 +175,7 @@
                 android:id="@+id/buttonThree"/>
 
             <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/buttonMinus"
@@ -145,6 +193,7 @@
             android:layout_height="wrap_content">
 
             <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
@@ -152,6 +201,7 @@
                 android:id="@+id/buttonZero"/>
 
             <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
@@ -159,6 +209,7 @@
                 android:id="@+id/buttonPoint"/>
 
             <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/buttonDivide"
@@ -166,6 +217,7 @@
                 />
 
             <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/buttonPlus"
@@ -184,6 +236,7 @@
             android:layout_height="wrap_content">
 
             <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/buttonMultiply"
@@ -191,6 +244,7 @@
                 />
 
             <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/buttonNegative"
@@ -198,6 +252,7 @@
                 />
 
             <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/buttonGradiation"
@@ -205,6 +260,7 @@
                 />
 
             <Button
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/buttonEqual"
@@ -212,47 +268,7 @@
                 />
 
         </LinearLayout>
+
     </LinearLayout>
-
-
-    <View
-        android:id="@+id/line"
-        android:layout_below="@+id/ll1"
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@android:color/black" />
-
-    <LinearLayout
-
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@id/line">
-
-        <Button
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/buttonCancel"
-            android:text="@string/cancel"/>
-
-        <Button
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/buttonOk"
-            android:text="@string/okey"/>
-    </LinearLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:hint="@string/zero"
-        android:id="@+id/textView"
-        android:layout_above="@+id/ll1"
-        android:layout_alignEnd="@+id/ll1" />
 
 </RelativeLayout>

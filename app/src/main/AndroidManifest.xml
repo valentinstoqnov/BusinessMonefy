@@ -3,7 +3,7 @@
     package="org.elsys.valiolucho.businessmonefy">
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
@@ -28,21 +28,13 @@
             android:label="@string/title_activity_plus"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="org.elsys.valiolucho.b.MinusActivity"
-            android:label="@string/title_activity_minus"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name="org.elsys.valiolucho.bus.MinusActivity"
-            android:label="@string/title_activity_minus"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".MinusActivity"
             android:label="@string/title_activity_minus"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name="org.elsys.valiolucho.calculator.CalcActivity"
             android:label="@string/title_activity_calc"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

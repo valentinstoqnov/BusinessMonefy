@@ -67,7 +67,8 @@ public class HomeActivity extends AppCompatActivity {
         minusImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent minusActivityIntent = new Intent(HomeActivity.this, MinusActivity.class);
+                Intent minusActivityIntent = new Intent(HomeActivity.this, CalcActivity.class);
+                minusActivityIntent.putExtra("minus", true);
                 startActivity(minusActivityIntent);
             }
         });

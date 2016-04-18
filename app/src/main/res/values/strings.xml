@@ -10,9 +10,6 @@
     <string name="title_activity_calc">CalcActivity</string>
 
     <string name="txtSize">25sp</string>
-    <string name="okey">OK</string>
-    <string name="cancel">Cancel</string>
-
     <string name="zero">0</string>
     <string name="one">1</string>
     <string name="two">2</string>

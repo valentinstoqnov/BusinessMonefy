@@ -1,6 +1,6 @@
 package org.elsys.valiolucho.calculator;
 
-import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -12,9 +12,6 @@ import android.widget.TextView;
 import org.elsys.valiolucho.businessmonefy.R;
 
 import java.text.DecimalFormat;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,7 +20,6 @@ public class CalcActivity extends AppCompatActivity {
     TextView viewDisplay;
     private Button zero, one, two, three, four, five, six, seven, eight, nine;
     private Button mul, div, add, sub, sqrt, point, neg, percent, equal, delete, backspace, gradiation;
-    private Button cancel, ok;
     private ButtonClickListener buttonClick = new ButtonClickListener();
     protected double numBuff;
     protected String operation;
@@ -40,11 +36,28 @@ public class CalcActivity extends AppCompatActivity {
                 R.id.buttonSix,R.id.buttonSeven,R.id.buttonEight,R.id.buttonNine,R.id.buttonPlus,R.id.buttonMinus,
                 R.id.buttonMultiply,R.id.buttonDivide,R.id.buttonGradiation,
                 R.id.buttonNegative,R.id.buttonPoint, R.id.buttonBackspace, R.id.buttonEqual,
-                R.id.buttonDelete,R.id.buttonOk,R.id.buttonCancel};
+                R.id.buttonDelete};
 
-        for (int id: idList) {
-            View v = (View) findViewById(id);
-            v.setOnClickListener(buttonClick);
+        boolean isMinus = false;
+        Bundle extras = getIntent().getExtras();
+        if(extras != null) {
+            isMinus = true;
+        }
+
+        if(isMinus) {
+            viewDisplay.setTextColor(Color.parseColor("#C85050"));
+            for (int id: idList) {
+                View v = (View) findViewById(id);
+                v.setBackgroundColor(Color.parseColor("#C85050"));
+                v.setOnClickListener(buttonClick);
+            }
+        }else{
+            viewDisplay.setTextColor(Color.parseColor("#62F464"));
+            for (int id: idList) {
+                View v = (View) findViewById(id);
+                v.setBackgroundColor(Color.parseColor("#62F464"));
+                v.setOnClickListener(buttonClick);
+            }
         }
     }
 
