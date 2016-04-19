@@ -5,6 +5,8 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -23,21 +25,25 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GraphicsActivity extends AppCompatActivity {
+public class GraphicsActivity extends FragmentActivity {
+
+    ViewPager viewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_graphics);
+        viewPager = (ViewPager) findViewById(R.id.viewPager);
+        ChartsSwipeAdapter chartsSwipeAdapter = new ChartsSwipeAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(chartsSwipeAdapter);
 
-
-        BarChart chart = (BarChart) findViewById(R.id.chart);
+       /* BarChart chart = (BarChart) findViewById(R.id.chart);
 
         BarData data = new BarData(getXAxisValues(), getDataSet());
         chart.setData(data);
         chart.setDescription("My Chart");
         chart.animateXY(2000, 2000);
-        chart.invalidate();
+        chart.invalidate();*/
 
     }
 
