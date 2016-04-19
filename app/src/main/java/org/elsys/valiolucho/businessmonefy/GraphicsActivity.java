@@ -46,7 +46,7 @@ public class GraphicsActivity extends FragmentActivity {
         chart.invalidate();*/
 
     }
-
+/*
     private ArrayList<IBarDataSet> getDataSet() {
         ArrayList<IBarDataSet> dataSets = null;
 
@@ -92,5 +92,5 @@ public class GraphicsActivity extends FragmentActivity {
     private String[] getXAxisValues() {
         String[] stri = {"JAN","FEB","MAR","APR","MAY","JUN"};
         return stri;
-    }
+    }*/
 }

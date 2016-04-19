@@ -5,13 +5,21 @@
     tools:context="org.elsys.valiolucho.businessmonefy.ChartsFragment">
 
 
+    <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/barChart"
+        android:layout_width="match_parent"
+        android:layout_height="300dp" />
 
+    <com.github.mikephil.charting.charts.PieChart
+        android:id="@+id/pieChart"
+        android:layout_width="match_parent"
+        android:layout_height="300dp" />
 
     <!--
     https://www.youtube.com/watch?v=9phSvgqpNtE
     http://stackoverflow.com/questions/21065127/how-to-make-a-tutorial-for-my-android-application
     -->
-    <TextView
+    <!--<TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
@@ -19,5 +27,5 @@
         android:id="@+id/fragmentTextView"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="105dp" />
+        android:layout_marginTop="105dp" />-->
 </RelativeLayout>
