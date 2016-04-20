@@ -1,0 +1,17 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="org.elsys.valiolucho.businessmonefy.BarChartFragment">
+
+
+    <com.github.mikephil.charting.charts.BarChart
+        android:id="@+id/barChart"
+        android:layout_width="match_parent"
+        android:layout_height="300dp" />
+
+    <!--
+    https://www.youtube.com/watch?v=9phSvgqpNtE
+    http://stackoverflow.com/questions/21065127/how-to-make-a-tutorial-for-my-android-application
+    -->
+</RelativeLayout>

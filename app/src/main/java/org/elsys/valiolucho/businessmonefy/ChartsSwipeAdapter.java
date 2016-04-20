@@ -16,7 +16,25 @@ public class ChartsSwipeAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        Fragment fr = new ChartsFragment();
+        Fragment fr;
+        switch (position) {
+            case 0:
+                fr = new BarChartFragment();
+                break;
+            case 1:
+                fr = new PieChartFragment();
+                break;
+            case 2:
+                fr = new BarChartFragment();
+                break;
+            case 3:
+                fr = new PieChartFragment();
+                break;
+            default:
+                fr = new BarChartFragment();
+                break;
+        }
+
         Bundle bundle = new Bundle();
         bundle.putInt("chart", position + 1);
         fr.setArguments(bundle);
