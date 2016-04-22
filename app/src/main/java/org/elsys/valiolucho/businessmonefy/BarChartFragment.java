@@ -40,7 +40,7 @@ public class BarChartFragment extends Fragment {
         BarData data = new BarData(getXAxisValues(), getDataSet());
         barChart.setData(data);
         barChart.setDescription("My Chart: " + message);
-        barChart.animateXY(2000, 2000);
+        barChart.animateXY(2500, 2500);
         barChart.invalidate();
 
         return view;
@@ -78,7 +78,7 @@ public class BarChartFragment extends Fragment {
         valueSet2.add(v2e6);
 
         BarDataSet barDataSet1 = new BarDataSet(valueSet1, "Brand 1");
-        barDataSet1.setColor(Color.rgb(0, 155, 0));
+        barDataSet1.setColor(ColorTemplate.getHoloBlue());
         BarDataSet barDataSet2 = new BarDataSet(valueSet2, "Brand 2");
         barDataSet2.setColors(ColorTemplate.COLORFUL_COLORS);
 

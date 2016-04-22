@@ -8,10 +8,11 @@
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/barChart"
         android:layout_width="match_parent"
-        android:layout_height="300dp" />
+        android:layout_height="500dp" />
 
     <!--
     https://www.youtube.com/watch?v=9phSvgqpNtE
     http://stackoverflow.com/questions/21065127/how-to-make-a-tutorial-for-my-android-application
+    http://androidexample.com/Swipe_screen_left__right__top_bottom/index.php?view=article_discription&aid=95&aaid=118
     -->
 </RelativeLayout>

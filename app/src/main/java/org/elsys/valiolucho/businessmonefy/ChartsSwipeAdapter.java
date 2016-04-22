@@ -25,13 +25,13 @@ public class ChartsSwipeAdapter extends FragmentPagerAdapter {
                 fr = new PieChartFragment();
                 break;
             case 2:
-                fr = new BarChartFragment();
+                fr = new LineChartFragment();
                 break;
             case 3:
-                fr = new PieChartFragment();
+                fr = new BarChartFragment();
                 break;
             default:
-                fr = new BarChartFragment();
+                fr = new LineChartFragment();
                 break;
         }
 
@@ -44,6 +44,6 @@ public class ChartsSwipeAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 5;
+        return 4;
     }
 }
