@@ -32,5 +32,31 @@
     <string name="delete">DEL</string>
     <string name="negative">+/-</string>
     <string name="backspace">"\u232B"</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="editDialog">EDIT THE RECORD FROM\n</string>
+    <string name="saveED">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="name">Name</string>
+    <string name="description">Description</string>
+    <string name="money">Money</string>
+
+    <string name="chooseOrder">Choose order</string>
+    <string-array name="orderOptions">
+        <item>ASCENDING</item>
+        <item>DESCENDING</item>
+    </string-array>
+
+    <string-array name="periodNames">
+        <item>Today</item>
+        <item>Yesterday</item>
+        <item>Week</item>
+        <item>Month</item>
+        <item>Year</item>
+        <item>All records</item>
+        <item>Other</item>
+    </string-array>
+
+    <string name="from">From</string>
+    <string name="to">To</string>
+
 </resources>

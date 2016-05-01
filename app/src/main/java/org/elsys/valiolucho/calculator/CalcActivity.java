@@ -1,36 +1,55 @@
 package org.elsys.valiolucho.calculator;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-
+import android.widget.Toast;
+import org.elsys.valiolucho.businessmonefy.DataBaseHelper;
+import org.elsys.valiolucho.businessmonefy.OnSwipeTouchListener;
 import org.elsys.valiolucho.businessmonefy.R;
+import org.elsys.valiolucho.businessmonefy.Transaction;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CalcActivity extends AppCompatActivity {
     EditText calcDisplay;
     TextView viewDisplay;
-    private Button zero, one, two, three, four, five, six, seven, eight, nine;
-    private Button mul, div, add, sub, sqrt, point, neg, percent, equal, delete, backspace, gradiation;
     private ButtonClickListener buttonClick = new ButtonClickListener();
     protected double numBuff;
     protected String operation;
+
+    RelativeLayout relativeLayout;
+    EditText nameET;
+    EditText descriptionET;
+    private static final int REQUIRED_NAME_LENGTH = 3;
+    private static final int REQUIRED_DESCR_LENGTH = 2*REQUIRED_NAME_LENGTH;
+
+    DataBaseHelper myDb;
+    SQLiteDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calc);
-
+        relativeLayout = (RelativeLayout) findViewById(R.id.mainCalcRLayout);
         calcDisplay = (EditText) findViewById(R.id.calcDisplay);
         viewDisplay = (TextView) findViewById(R.id.textView);
+        nameET = (EditText) findViewById(R.id.nameEditText);
+        descriptionET = (EditText) findViewById(R.id.descriptionEditText);
+        myDb = new DataBaseHelper(CalcActivity.this);
+        db = myDb.getWritableDatabase();
 
         int idList[] = {R.id.buttonZero,R.id.buttonOne,R.id.buttonTwo,R.id.buttonThree,R.id.buttonFour,R.id.buttonFive,
                 R.id.buttonSix,R.id.buttonSeven,R.id.buttonEight,R.id.buttonNine,R.id.buttonPlus,R.id.buttonMinus,
@@ -59,6 +78,34 @@ public class CalcActivity extends AppCompatActivity {
                 v.setOnClickListener(buttonClick);
             }
         }
+        leftSwipeListener();
+    }
+
+    private void leftSwipeListener() {
+        relativeLayout.setOnTouchListener(new OnSwipeTouchListener(CalcActivity.this) {
+            public void onSwipeLeft() {
+                String name = nameET.getText().toString();
+                String description = descriptionET.getText().toString();
+                int money = Integer.parseInt(viewDisplay.getText().toString());
+                if(name.length() < REQUIRED_NAME_LENGTH) {
+                    Toast.makeText(CalcActivity.this, "Name is too short", Toast.LENGTH_SHORT).show();
+                }else {
+                    if(description.length() < REQUIRED_DESCR_LENGTH) {
+                        Toast.makeText(CalcActivity.this, "Description is too short", Toast.LENGTH_SHORT).show();
+                    }else{
+                        if(money == 0) {
+                            Toast.makeText(CalcActivity.this, "Money can not be zero", Toast.LENGTH_SHORT).show();
+                        }else {
+                            Transaction transaction = new Transaction(name, description, money);
+                            transaction.setDate();
+                            myDb.insertData(transaction, db);//podavam myDb = > TUPOOOOOOOO!!
+                            Toast.makeText(CalcActivity.this, "Saved!", Toast.LENGTH_SHORT).show();
+                            myDb.close();
+                        }
+                    }
+                }
+            }
+        });
     }
 
     private double calculate(double val) {

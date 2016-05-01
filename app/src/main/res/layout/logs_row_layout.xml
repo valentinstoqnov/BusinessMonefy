@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="0dp"
+    android:layout_marginBottom="0dp"
+    android:focusableInTouchMode="true">
+
+    <ImageView
+        android:src="@drawable/tr_plus"
+        android:id="@+id/transaction_img"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp"
+        android:padding="10dp"
+        android:paddingLeft="10dp"
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:id="@+id/transaction_name"
+        android:paddingTop="5dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:text="JAJA"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/transaction_img" />
+
+    <TextView
+        android:text="2016/04/11"
+        android:textSize="16sp"
+        android:id="@+id/transaction_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/transaction_name"
+        android:layout_toEndOf="@+id/transaction_img"/>
+
+    <TextView
+        android:text="100"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_centerVertical="true"
+        android:id="@+id/transaction_price"
+        android:layout_toStartOf="@+id/transaction_currency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:text="$"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_toStartOf="@+id/editPencil"
+        android:layout_centerVertical="true"
+        android:paddingEnd="@dimen/activity_horizontal_margin"
+        android:id="@+id/transaction_currency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+    <ImageButton
+        android:id="@id/editPencil"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:paddingEnd="@dimen/activity_horizontal_margin"
+        android:background="@null"
+        android:src="@drawable/edit_pencil_icon"/>
+
+    <View
+        android:id="@+id/lineSeparator"
+        android:layout_below="@+id/transaction_img"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorTrPlus"/>
+
+</RelativeLayout>

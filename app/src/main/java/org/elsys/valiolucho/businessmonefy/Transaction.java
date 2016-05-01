@@ -1,15 +1,13 @@
 package org.elsys.valiolucho.businessmonefy;
 
-import java.util.Calendar;
-
 public class Transaction {
 
     private static final int MULTIPLIER = 10;
-    int id;
     String name;
     String description;
     int money;
-    Calendar date;
+    String date;
+    private int transactionImgRes;
     //String category;
 
     private int serializeMoney(double mny) {
@@ -22,19 +20,26 @@ public class Transaction {
         return strMoney.length();
     }
 
-    public Transaction(String name, String description, int money, Calendar date) {
+    public Transaction(String name, String description, int money) {
         this.name = name;
         this.description = description;
         this.money = serializeMoney(money);
+    }
+
+    public void setTransactionImgRes(int transactionImgRes) {
+        this.transactionImgRes = transactionImgRes;
+    }
+
+
+    public void setDate() {
+        this.date = new MyDate().getCurrentDateTime();
+    }
+    public void setDate(String date) {
         this.date = date;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getId() {
-        return id;
+    public int getTransactionResource() {
+        return transactionImgRes;
     }
 
     public String getName() {
@@ -49,7 +54,7 @@ public class Transaction {
         return money;
     }
 
-    public Calendar getDate() {
+    public String getDate() {
         return date;
     }
 }
