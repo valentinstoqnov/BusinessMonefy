@@ -17,6 +17,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    sourceSets {
+        main {
+            java.srcDirs = ['src/main/java', 'src/main/java/org/elsys/valiolucho/businessmonefy/Dialogs']
+        }
+    }
 }
 
 repositories {
@@ -31,4 +36,5 @@ dependencies {
     compile 'com.android.support:design:23.3.0'
     compile 'com.android.support:support-v4:23.3.0'
     compile 'joda-time:joda-time:2.9.3'
+    compile 'com.github.ashishbhandari:AndroidTabbedDialog:1.0'
 }

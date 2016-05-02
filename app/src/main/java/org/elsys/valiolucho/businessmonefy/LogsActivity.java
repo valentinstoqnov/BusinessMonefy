@@ -1,25 +1,16 @@
 package org.elsys.valiolucho.businessmonefy;
 
-import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
-
 import java.util.ArrayList;
 
 public class LogsActivity extends AppCompatActivity {
@@ -32,10 +23,10 @@ public class LogsActivity extends AppCompatActivity {
     private Spinner spinner;
     private ArrayAdapter<CharSequence> spinnerAdapter;
 
-    private DataBaseHelper myDbHelper;
+    private DataBaseHelper myDbHelper;//= DataBaseHelper.getInstance(this);
     private SQLiteDatabase db;
     private Cursor cursor;
-    private String order;
+    private String order = "DESC";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +39,6 @@ public class LogsActivity extends AppCompatActivity {
         spinner = (Spinner) findViewById(R.id.spinnerLogs);
         spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.periodNames, android.R.layout.simple_spinner_item);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        myDbHelper = new DataBaseHelper(this);
-        db = myDbHelper.getReadableDatabase();
 
         spinner.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
@@ -69,41 +58,56 @@ public class LogsActivity extends AppCompatActivity {
                 MyDate myDate = new MyDate();
                 String toDate = myDate.getCurrentDateTime();
                 String fromDate;
+                myDbHelper = new DataBaseHelper(LogsActivity.this);
+                db = myDbHelper.getReadableDatabase();
                 if(itemText.equals(periodNames[0])) {
                     fromDate = myDate.getPreviousDateTime(toDate, "today");
-                    cursor = myDbHelper.getSpecificData(db, fromDate, toDate, order);
+                    cursor = myDbHelper.getSpecificData(db, order, fromDate, toDate);
                 }else if(itemText.equals(periodNames[1])){
                     fromDate = myDate.getPreviousDateTime(toDate, "day");
-                    cursor = myDbHelper.getSpecificData(db, fromDate, toDate, order);
+                    cursor = myDbHelper.getSpecificData(db, order, fromDate, toDate);
                 }else if(itemText.equals(periodNames[2])) {
                     fromDate = myDate.getPreviousDateTime(toDate, "week");
-                    cursor = myDbHelper.getSpecificData(db, fromDate, toDate, order);
+                    cursor = myDbHelper.getSpecificData(db, order, fromDate, toDate);
                 }else if(itemText.equals(periodNames[3])) {
                     fromDate = myDate.getPreviousDateTime(toDate, "month");
-                    cursor = myDbHelper.getSpecificData(db, fromDate, toDate, order);
+                    cursor = myDbHelper.getSpecificData(db, order, fromDate, toDate);
                 }else if(itemText.equals(periodNames[4])) {
                     fromDate = myDate.getPreviousDateTime(toDate, "year");
-                    cursor = myDbHelper.getSpecificData(db, fromDate, toDate, order);
+                    cursor = myDbHelper.getSpecificData(db, order, fromDate, toDate);
                 }else if(itemText.equals(periodNames[5])) {
                     cursor = myDbHelper.getAllData(db, order);
                 }else {
-                    //dialog with datetime picker
+                    DateHolder holder = new DateHolder();
+                    StartDateDialogPicker dialogPicker = new StartDateDialogPicker();
+                    dialogPicker.setDateHolder(holder);
+                    dialogPicker.show(LogsActivity.this.getFragmentManager(), "date_picker");
+                    fromDate = holder.getStartDate();
+                    toDate = holder.getEndDate();
+                    cursor = myDbHelper.getSpecificData(db, order, fromDate, toDate);
                 }
+                db.close();
+                myDbHelper.close();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
+                cursor = myDbHelper.getAllData(db, order);
+                db.close();
+                myDbHelper.close();
             }
         });
         spinner.setAdapter(spinnerAdapter);
-        cursor.moveToFirst();
-        do{
-            Transaction transaction = new Transaction(cursor.getString(0), cursor.getString(1), cursor.getInt(2));
-            transaction.setDate(cursor.getString(3));
-            arrayList.add(transaction);
-        }while (cursor.moveToNext());
-        myDbHelper.close();
+        if(cursor != null) {
+            cursor.moveToFirst();
+            do {
+                Transaction transaction = new Transaction(cursor.getString(0), cursor.getString(1), cursor.getInt(2));
+                transaction.setDate(cursor.getString(3));
+                arrayList.add(transaction);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+
 
         recyclerAdapter = new RecyclerAdapter(arrayList, this);
         recyclerView.setAdapter(recyclerAdapter);

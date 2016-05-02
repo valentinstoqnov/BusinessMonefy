@@ -28,6 +28,7 @@ public class LogsOrderDialog extends DialogFragment {
                 }else {
                     option = "DESC";
                 }
+                dialog.dismiss();
             }
         });
         Dialog dialog = builder.create();

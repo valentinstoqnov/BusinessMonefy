@@ -11,6 +11,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.elsys.valiolucho.businessmonefy.Transaction;
+
 public class LogsAdapter extends ArrayAdapter{
     private List list = new ArrayList();
 

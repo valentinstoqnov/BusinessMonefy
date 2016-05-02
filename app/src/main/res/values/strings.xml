@@ -58,5 +58,7 @@
 
     <string name="from">From</string>
     <string name="to">To</string>
+    <string name="next">Next</string>
+    <string name="finish">Finish</string>
 
 </resources>

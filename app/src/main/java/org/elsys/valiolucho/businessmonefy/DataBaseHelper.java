@@ -23,6 +23,18 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     private static final String DROP_TABLE_QUERY = "DROP TABLE IF EXISTS " + TABLE_NAME;
 
+    private static DataBaseHelper sInstance;
+    public static synchronized DataBaseHelper getInstance(Context context) {
+
+        // Use the application context, which will ensure that you
+        // don't accidentally leak an Activity's context.
+        // See this article for more information: http://bit.ly/6LRzfx
+        if (sInstance == null) {
+            sInstance = new DataBaseHelper(context.getApplicationContext());
+        }
+        return sInstance;
+    }
+
     public DataBaseHelper(Context context) {
         super(context, DB_NAME, null, DATABASE_VERSION);
     }
@@ -69,16 +81,15 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
     public Cursor getAllData(SQLiteDatabase db, String sortOrder) {
-        sortOrder = DATE + sortOrder;
-        return db.query("SELECT * FROM " + TABLE_NAME, new String[] {NAME, DESCRIPTION, DATE, MONEY},
-                null, null, null, null, sortOrder);
+        sortOrder = DATE + " " + sortOrder;
+        return db.query(TABLE_NAME, new String[] {NAME, DESCRIPTION, DATE, MONEY}, null, null, null, null, sortOrder);
     }
 
     public Cursor getSpecificData(SQLiteDatabase db, String sortORder, String dateFrom, String dateTo) {
-        sortORder = DATE + sortORder;
+        sortORder = DATE + " " + sortORder;
         String[] columns = {NAME, DESCRIPTION, DATE, MONEY};
         String selection = DATE + " BETWEEN ? AND ?";
         String[] selectionArgs = {dateFrom, dateTo};
-        return db.query("SELECT * FROM " + TABLE_NAME, columns, selection, selectionArgs, null, null, sortORder);
+        return db.query(TABLE_NAME, columns, selection, selectionArgs, null, null, sortORder);
     }
 }

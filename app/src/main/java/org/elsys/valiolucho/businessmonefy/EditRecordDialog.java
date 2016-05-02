@@ -48,7 +48,7 @@ public class EditRecordDialog extends DialogFragment{
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        dialog.dismiss();
+                        dialog.cancel();
                     }
                 });
         return builder.create();

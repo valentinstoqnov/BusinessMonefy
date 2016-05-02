@@ -4,6 +4,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -48,8 +49,6 @@ public class CalcActivity extends AppCompatActivity {
         viewDisplay = (TextView) findViewById(R.id.textView);
         nameET = (EditText) findViewById(R.id.nameEditText);
         descriptionET = (EditText) findViewById(R.id.descriptionEditText);
-        myDb = new DataBaseHelper(CalcActivity.this);
-        db = myDb.getWritableDatabase();
 
         int idList[] = {R.id.buttonZero,R.id.buttonOne,R.id.buttonTwo,R.id.buttonThree,R.id.buttonFour,R.id.buttonFive,
                 R.id.buttonSix,R.id.buttonSeven,R.id.buttonEight,R.id.buttonNine,R.id.buttonPlus,R.id.buttonMinus,
@@ -98,9 +97,13 @@ public class CalcActivity extends AppCompatActivity {
                         }else {
                             Transaction transaction = new Transaction(name, description, money);
                             transaction.setDate();
-                            myDb.insertData(transaction, db);//podavam myDb = > TUPOOOOOOOO!!
-                            Toast.makeText(CalcActivity.this, "Saved!", Toast.LENGTH_SHORT).show();
+                            myDb = new DataBaseHelper(CalcActivity.this);
+                            db = myDb.getWritableDatabase();
+                            myDb.insertData(transaction, db);
+                            db.close();
                             myDb.close();
+                            Toast.makeText(CalcActivity.this, "Saved!", Toast.LENGTH_SHORT).show();
+                            finish();
                         }
                     }
                 }
