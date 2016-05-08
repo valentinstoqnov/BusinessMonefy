@@ -1,19 +1,34 @@
 package org.elsys.valiolucho.businessmonefy;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.Spinner;
+import android.widget.TextView;
+
 import java.util.ArrayList;
 
-public class LogsActivity extends AppCompatActivity {
+public class LogsActivity extends AppCompatActivity implements View.OnLongClickListener{
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter recyclerAdapter;
@@ -24,13 +39,20 @@ public class LogsActivity extends AppCompatActivity {
     private ArrayAdapter<CharSequence> spinnerAdapter;
 
     private DataBaseHelper myDbHelper;//= DataBaseHelper.getInstance(this);
-    private SQLiteDatabase db;
-    private Cursor cursor;
     private String order = "DESC";
+
+    private DateHolder dateHolder;
+
+    private String toDate;
+    private String fromDate;
+
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_logs);
         recyclerView = (RecyclerView) findViewById(R.id.logsRecyclerView);
         layoutManager = new LinearLayoutManager(this);
@@ -39,7 +61,11 @@ public class LogsActivity extends AppCompatActivity {
         spinner = (Spinner) findViewById(R.id.spinnerLogs);
         spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.periodNames, android.R.layout.simple_spinner_item);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerManager();
 
+    }
+
+    private void spinnerManager() {
         spinner.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -56,61 +82,97 @@ public class LogsActivity extends AppCompatActivity {
                 String[] periodNames = getResources().getStringArray(R.array.periodNames);
                 String itemText = parent.getItemAtPosition(position).toString();
                 MyDate myDate = new MyDate();
-                String toDate = myDate.getCurrentDateTime();
-                String fromDate;
-                myDbHelper = new DataBaseHelper(LogsActivity.this);
-                db = myDbHelper.getReadableDatabase();
+                toDate = myDate.getCurrentDateTime();
+                myDbHelper = DataBaseHelper.getInstance(getApplicationContext());
                 if(itemText.equals(periodNames[0])) {
                     fromDate = myDate.getPreviousDateTime(toDate, "today");
-                    cursor = myDbHelper.getSpecificData(db, order, fromDate, toDate);
+                    arrayList = myDbHelper.getSpecificData(order, fromDate, toDate);
                 }else if(itemText.equals(periodNames[1])){
                     fromDate = myDate.getPreviousDateTime(toDate, "day");
-                    cursor = myDbHelper.getSpecificData(db, order, fromDate, toDate);
+                    arrayList = myDbHelper.getSpecificData(order, fromDate, toDate);
                 }else if(itemText.equals(periodNames[2])) {
                     fromDate = myDate.getPreviousDateTime(toDate, "week");
-                    cursor = myDbHelper.getSpecificData(db, order, fromDate, toDate);
+                    arrayList = myDbHelper.getSpecificData(order, fromDate, toDate);
                 }else if(itemText.equals(periodNames[3])) {
                     fromDate = myDate.getPreviousDateTime(toDate, "month");
-                    cursor = myDbHelper.getSpecificData(db, order, fromDate, toDate);
+                    arrayList = myDbHelper.getSpecificData(order, fromDate, toDate);
                 }else if(itemText.equals(periodNames[4])) {
                     fromDate = myDate.getPreviousDateTime(toDate, "year");
-                    cursor = myDbHelper.getSpecificData(db, order, fromDate, toDate);
+                    arrayList = myDbHelper.getSpecificData(order, fromDate, toDate);
                 }else if(itemText.equals(periodNames[5])) {
-                    cursor = myDbHelper.getAllData(db, order);
+                    arrayList = myDbHelper.getAllData(order);
                 }else {
-                    DateHolder holder = new DateHolder();
-                    StartDateDialogPicker dialogPicker = new StartDateDialogPicker();
-                    dialogPicker.setDateHolder(holder);
-                    dialogPicker.show(LogsActivity.this.getFragmentManager(), "date_picker");
-                    fromDate = holder.getStartDate();
-                    toDate = holder.getEndDate();
-                    cursor = myDbHelper.getSpecificData(db, order, fromDate, toDate);
+                    datepickerManager();
                 }
-                db.close();
+                recyclerAdapter = new RecyclerAdapter(arrayList, getApplicationContext());
+                recyclerView.setAdapter(recyclerAdapter);
                 myDbHelper.close();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                cursor = myDbHelper.getAllData(db, order);
-                db.close();
+                arrayList = myDbHelper.getAllData(order);
                 myDbHelper.close();
             }
         });
         spinner.setAdapter(spinnerAdapter);
-        if(cursor != null) {
-            cursor.moveToFirst();
-            do {
-                Transaction transaction = new Transaction(cursor.getString(0), cursor.getString(1), cursor.getInt(2));
-                transaction.setDate(cursor.getString(3));
-                arrayList.add(transaction);
-            } while (cursor.moveToNext());
-            cursor.close();
-        }
-
-
-        recyclerAdapter = new RecyclerAdapter(arrayList, this);
-        recyclerView.setAdapter(recyclerAdapter);
     }
 
+    private void datepickerManager() {
+        LayoutInflater inflater = LayoutInflater.from(LogsActivity.this);
+        final View dialogView = inflater.inflate(R.layout.date_picker_dialog_layout, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(LogsActivity.this);
+        builder.setView(dialogView);
+        builder.setTitle("Choose two dates");
+        final TextView fromDateET;
+        final TextView toDateET;
+        fromDateET = (TextView) dialogView.findViewById(R.id.fromDateTV);
+        toDateET = (TextView) dialogView.findViewById(R.id.toDateTV);
+        String text = getResources().getString(R.string.one) + ". " + getResources().getString(R.string.dateTxtView);
+        fromDateET.setText(text);
+        text = getResources().getString(R.string.two) + ". " + getResources().getString(R.string.dateTxtView);
+        toDateET.setText(text);
+        fromDateET.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                org.elsys.valiolucho.businessmonefy.DatePickerDialog.which = true;
+                org.elsys.valiolucho.businessmonefy.DatePickerDialog dp = new org.elsys.valiolucho.businessmonefy.DatePickerDialog();
+                dp.setCancelable(true);
+                dp.show(getFragmentManager(), "DatePicker");
+            }
+        });
+
+        toDateET.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                org.elsys.valiolucho.businessmonefy.DatePickerDialog.which = true;
+                org.elsys.valiolucho.businessmonefy.DatePickerDialog dp = new org.elsys.valiolucho.businessmonefy.DatePickerDialog();
+                dp.setCancelable(true);
+                dp.show(getFragmentManager(), "DatePicker");
+            }
+        });
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                fromDate = fromDateET.getText().toString();
+                toDate = toDateET.getText().toString();
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+        arrayList = myDbHelper.getSpecificData(order, fromDate, toDate);
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        return false;
+    }
 }

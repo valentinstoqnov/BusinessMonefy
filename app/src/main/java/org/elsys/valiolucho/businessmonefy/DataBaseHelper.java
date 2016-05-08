@@ -5,6 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
+
+import java.util.ArrayList;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
 
@@ -24,21 +29,19 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private static final String DROP_TABLE_QUERY = "DROP TABLE IF EXISTS " + TABLE_NAME;
 
     private static DataBaseHelper sInstance;
-    public static synchronized DataBaseHelper getInstance(Context context) {
 
-        // Use the application context, which will ensure that you
-        // don't accidentally leak an Activity's context.
-        // See this article for more information: http://bit.ly/6LRzfx
+    Context context;
+    private DataBaseHelper(Context context) {
+        super(context, DB_NAME, null, DATABASE_VERSION);
+        this.context = context;
+    }
+
+    public static synchronized DataBaseHelper getInstance(Context context) {
         if (sInstance == null) {
             sInstance = new DataBaseHelper(context.getApplicationContext());
         }
         return sInstance;
     }
-
-    public DataBaseHelper(Context context) {
-        super(context, DB_NAME, null, DATABASE_VERSION);
-    }
-
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -51,45 +54,92 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void insertData(Transaction transaction, SQLiteDatabase db) {
+    public void deleteTable(){
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("DELETE FROM " + TABLE_NAME);
+        db.execSQL("VACUUM");
+        db.close();
+    }
+
+    public void insertData(Transaction transaction) {
+        SQLiteDatabase db = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(NAME, transaction.getName());
         contentValues.put(DESCRIPTION, transaction.getDescription());
         contentValues.put(DATE, transaction.getDate());
-        contentValues.put(MONEY, transaction.getMoney());
+        contentValues.put(MONEY, transaction.getSerializedMoney());
 
         db.insert(TABLE_NAME, null, contentValues);
+        db.close();
     }
 
-    public void updateData(Transaction oldTransaction, Transaction newTransaction, SQLiteDatabase db) {
+    public void updateData(Transaction oldTransaction, Transaction newTransaction) {
+        SQLiteDatabase db = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(NAME, newTransaction.getName());
         contentValues.put(DESCRIPTION, newTransaction.getDescription());
         contentValues.put(DATE, newTransaction.getDate());
-        contentValues.put(MONEY, newTransaction.getMoney());
+        contentValues.put(MONEY, newTransaction.getSerializedMoney());
 
         String selection = DATE + " LIKE ?";
         String[] selectionArgs = {oldTransaction.getDate()};
 
         db.update(TABLE_NAME, contentValues, selection, selectionArgs);
+        db.close();
     }
 
-    public void deleteData(Transaction transaction, SQLiteDatabase db) {
+
+    //have to accept arraylist<Transaction>
+    public void deleteData(Transaction transaction) {
+        SQLiteDatabase db = getWritableDatabase();
         String selection = DATE + " LIKE ?";
         String[] selectionArgs = {transaction.getDate()};
         db.delete(TABLE_NAME, selection, selectionArgs);
+        db.close();
     }
 
-    public Cursor getAllData(SQLiteDatabase db, String sortOrder) {
+    public ArrayList<Transaction> getAllData(String sortOrder) {
+        SQLiteDatabase db = getReadableDatabase();
         sortOrder = DATE + " " + sortOrder;
-        return db.query(TABLE_NAME, new String[] {NAME, DESCRIPTION, DATE, MONEY}, null, null, null, null, sortOrder);
+        Cursor cursor = db.query(TABLE_NAME, new String[] {NAME, DESCRIPTION, DATE, MONEY}, null, null, null, null, sortOrder);
+        ArrayList<Transaction> arrayList = new ArrayList<>();
+        if(cursor != null && cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            do {
+                Transaction transaction = new Transaction(cursor.getString(cursor.getColumnIndex(NAME)),
+                        cursor.getString(cursor.getColumnIndex(DESCRIPTION)),
+                        Transaction.getDeserializedMoney(cursor.getInt(cursor.getColumnIndex(MONEY))));
+
+                transaction.setDate(cursor.getString(cursor.getColumnIndex(DATE)));
+
+                arrayList.add(transaction);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        db.close();
+        return arrayList;
     }
 
-    public Cursor getSpecificData(SQLiteDatabase db, String sortORder, String dateFrom, String dateTo) {
+    public ArrayList<Transaction> getSpecificData(String sortORder, String dateFrom, String dateTo) {
+        SQLiteDatabase db = getReadableDatabase();
         sortORder = DATE + " " + sortORder;
         String[] columns = {NAME, DESCRIPTION, DATE, MONEY};
         String selection = DATE + " BETWEEN ? AND ?";
         String[] selectionArgs = {dateFrom, dateTo};
-        return db.query(TABLE_NAME, columns, selection, selectionArgs, null, null, sortORder);
+        Cursor cursor = db.query(TABLE_NAME, columns, selection, selectionArgs, null, null, sortORder);
+        ArrayList<Transaction> arrayList = new ArrayList<>();
+        if(cursor != null && cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            do {
+                Transaction transaction = new Transaction(cursor.getString(cursor.getColumnIndex(NAME)),
+                        cursor.getString(cursor.getColumnIndex(DESCRIPTION)),
+                        Transaction.getDeserializedMoney(cursor.getInt(cursor.getColumnIndex(MONEY))));
+                transaction.setDate(cursor.getString(cursor.getColumnIndex(DATE)));
+                arrayList.add(transaction);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+        db.close();
+        return arrayList;
     }
 }

@@ -24,19 +24,13 @@ public class ChartsSwipeAdapter extends FragmentPagerAdapter {
             case 1:
                 fr = new PieChartFragment();
                 break;
-            case 2:
-                fr = new LineChartFragment();
-                break;
-            case 3:
-                fr = new BarChartFragment();
-                break;
             default:
                 fr = new LineChartFragment();
                 break;
         }
 
         Bundle bundle = new Bundle();
-        bundle.putInt("chart", position + 1);
+        bundle.putInt("Chart", position + 1);
         fr.setArguments(bundle);
 
         return fr;
@@ -44,6 +38,6 @@ public class ChartsSwipeAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 4;
+        return 3;
     }
 }

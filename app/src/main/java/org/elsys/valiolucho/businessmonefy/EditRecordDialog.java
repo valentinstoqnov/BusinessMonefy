@@ -40,9 +40,8 @@ public class EditRecordDialog extends DialogFragment{
                         }
                         Transaction transaction = new Transaction(name, description, money);
                         transaction.setDate();
-                        DataBaseHelper myDbHelper = new DataBaseHelper(null);//REPAIR THIS SHIT !!!!!
-                        SQLiteDatabase db = myDbHelper.getWritableDatabase();
-                        myDbHelper.insertData(transaction, db);
+                        DataBaseHelper myDbHelper = DataBaseHelper.getInstance(getActivity());
+                        myDbHelper.insertData(transaction);
                         myDbHelper.close();
                     }
                 })

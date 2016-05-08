@@ -1,5 +1,7 @@
 package org.elsys.valiolucho.businessmonefy;
 
+import android.util.Log;
+
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -19,19 +21,19 @@ public class MyDate {
         DateTimeFormatter formatter = DateTimeFormat.forPattern(DATE_TIME_FORMAT);
         DateTime dateTime = formatter.parseDateTime(date);
         if("today".equals(period)) {
-            dateTime.withHourOfDay(0).withMinuteOfHour(0).withSecondOfMinute(0);
+            dateTime = dateTime.withTimeAtStartOfDay();
         }else if ("day".equals(period)) {
-            dateTime.minusDays(1);
+            dateTime = dateTime.minusDays(1);
         }else if ("week".equals(period)){
-            dateTime.minusWeeks(1);
+            dateTime = dateTime.minusWeeks(1);
         }else if ("month".equals(period)) {
-            dateTime.minusMonths(1);
+            dateTime = dateTime.minusMonths(1);
         }else if ("year".equals(period)) {
-            dateTime.minusYears(1);
+            dateTime = dateTime.minusYears(1);
         }else if("endDay".equals(period)) {
             dateTime.withHourOfDay(23).withMinuteOfHour(59).withSecondOfMinute(59);
         }
-        return dateTime.toString();
+        return formatter.print(dateTime);
     }
 
     public String getLegibleDate(String date) {

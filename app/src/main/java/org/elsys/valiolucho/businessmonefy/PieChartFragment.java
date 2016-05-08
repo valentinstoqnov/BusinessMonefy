@@ -38,7 +38,7 @@ public class PieChartFragment extends Fragment {
         // Inflate the layout for this fragment
 
         Bundle bundle = getArguments();
-        String message = Integer.toString(bundle.getInt("chart"));
+        String message = Integer.toString(bundle.getInt("Chart"));
 
         ArrayList<Entry> entries = new ArrayList<>();
         entries.add(new Entry(4f, 0));

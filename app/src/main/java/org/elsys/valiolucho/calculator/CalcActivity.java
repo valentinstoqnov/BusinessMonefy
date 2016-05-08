@@ -1,10 +1,8 @@
 package org.elsys.valiolucho.calculator;
 
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,10 +15,6 @@ import org.elsys.valiolucho.businessmonefy.R;
 import org.elsys.valiolucho.businessmonefy.Transaction;
 
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -35,10 +29,9 @@ public class CalcActivity extends AppCompatActivity {
     EditText nameET;
     EditText descriptionET;
     private static final int REQUIRED_NAME_LENGTH = 3;
-    private static final int REQUIRED_DESCR_LENGTH = 2*REQUIRED_NAME_LENGTH;
+    private static final int REQUIRED_DESCR_LENGTH = REQUIRED_NAME_LENGTH;
 
     DataBaseHelper myDb;
-    SQLiteDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,15 +70,18 @@ public class CalcActivity extends AppCompatActivity {
                 v.setOnClickListener(buttonClick);
             }
         }
-        leftSwipeListener();
+        leftSwipeListener(isMinus);
     }
 
-    private void leftSwipeListener() {
+    private void leftSwipeListener(final boolean minus) {
         relativeLayout.setOnTouchListener(new OnSwipeTouchListener(CalcActivity.this) {
             public void onSwipeLeft() {
                 String name = nameET.getText().toString();
                 String description = descriptionET.getText().toString();
-                int money = Integer.parseInt(viewDisplay.getText().toString());
+                double money = Double.parseDouble(viewDisplay.getText().toString());
+                if (minus) {
+                    money = -money;
+                }
                 if(name.length() < REQUIRED_NAME_LENGTH) {
                     Toast.makeText(CalcActivity.this, "Name is too short", Toast.LENGTH_SHORT).show();
                 }else {
@@ -97,10 +93,8 @@ public class CalcActivity extends AppCompatActivity {
                         }else {
                             Transaction transaction = new Transaction(name, description, money);
                             transaction.setDate();
-                            myDb = new DataBaseHelper(CalcActivity.this);
-                            db = myDb.getWritableDatabase();
-                            myDb.insertData(transaction, db);
-                            db.close();
+                            myDb = DataBaseHelper.getInstance(getApplicationContext());
+                            myDb.insertData(transaction);
                             myDb.close();
                             Toast.makeText(CalcActivity.this, "Saved!", Toast.LENGTH_SHORT).show();
                             finish();
@@ -170,15 +164,14 @@ public class CalcActivity extends AppCompatActivity {
                     break;
                 case R.id.buttonBackspace :
                     String displayStr = calcDisplay.getText().toString();
-                    if(displayStr.length() < 1) {
-                        break;
-                    }
-                    displayStr = displayStr.substring(0, displayStr.length()-1);
-                    calcDisplay.setText(displayStr);
+                    if(displayStr.length() > 0) {
+                        displayStr = displayStr.substring(0, displayStr.length() - 1);
+                        calcDisplay.setText(displayStr);
 
-                    displayStr = viewDisplay.getText().toString();
-                    displayStr = displayStr.substring(0, displayStr.length() - 1);
-                    viewDisplay.setText(displayStr);
+                        displayStr = viewDisplay.getText().toString();
+                        displayStr = displayStr.substring(0, displayStr.length() - 1);
+                        viewDisplay.setText(displayStr);
+                    }
                     break;
                 case R.id.buttonPoint :
                     String displayCurr = calcDisplay.getText().toString();

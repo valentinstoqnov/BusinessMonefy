@@ -1,45 +1,42 @@
 package org.elsys.valiolucho.businessmonefy;
 
+import android.util.Log;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+
 public class Transaction {
 
-    private static final int MULTIPLIER = 10;
-    String name;
-    String description;
-    int money;
-    String date;
-    private int transactionImgRes;
+    private static final int MULTIPLIER = 100;
+    private String name;
+    private String description;
+    private double money;
+    private String date;
     //String category;
 
-    private int serializeMoney(double mny) {
-        return (int)(mny * MULTIPLIER * getCountOfNumsAfterFloationgPoint(mny));
+    public int getSerializedMoney() {
+        return (int)(money * MULTIPLIER);
     }
 
-    private int getCountOfNumsAfterFloationgPoint(double mny) {
-        String strMoney = String.valueOf(mny);
-        strMoney = strMoney.substring(strMoney.indexOf('.'), strMoney.length());
-        return strMoney.length();
+    public static double getDeserializedMoney(int mny) {
+        return mny / MULTIPLIER;
     }
 
-    public Transaction(String name, String description, int money) {
+
+    public Transaction(String name, String description, double money) {
         this.name = name;
         this.description = description;
-        this.money = serializeMoney(money);
-    }
-
-    public void setTransactionImgRes(int transactionImgRes) {
-        this.transactionImgRes = transactionImgRes;
+        this.money = money;
     }
 
 
     public void setDate() {
         this.date = new MyDate().getCurrentDateTime();
     }
+
     public void setDate(String date) {
         this.date = date;
-    }
-
-    public int getTransactionResource() {
-        return transactionImgRes;
     }
 
     public String getName() {
@@ -50,7 +47,7 @@ public class Transaction {
         return description;
     }
 
-    public int getMoney() {
+    public double getMoney() {
         return money;
     }
 

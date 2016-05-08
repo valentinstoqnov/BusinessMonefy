@@ -2,8 +2,10 @@ package org.elsys.valiolucho.businessmonefy;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.v4.app.FragmentManager;
+import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,10 +34,23 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
     @Override
     public void onBindViewHolder(RecyclerViewHolder holder, int position) {
         Transaction transaction = arrayList.get(position);
-        holder.imgView.setImageResource(transaction.getTransactionResource());
         holder.name.setText(transaction.getName());
-        holder.date.setText(transaction.getDate());//normalize date!!!
-        holder.price.setText(transaction.getMoney());
+        holder.date.setText(transaction.getDate());
+        holder.price.setText(String.valueOf(transaction.getMoney()));
+        holder.editPencil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditRecordDialog dialog = new EditRecordDialog();
+                dialog.show(((Activity) context).getFragmentManager(), "Dialog");
+            }
+        });
+        if(transaction.getMoney() > 0) {
+            holder.imgView.setImageResource(R.drawable.tr_plus);
+            holder.line.setBackgroundColor(ContextCompat.getColor(context, R.color.colorTrPlus));
+        }else{
+            holder.imgView.setImageResource(R.drawable.tr_minus);
+            holder.line.setBackgroundColor(ContextCompat.getColor(context, R.color.colorTrMinus));
+        }
     }
 
     @Override
@@ -48,21 +63,16 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
         TextView name, date, price;
         ImageView imgView;
         ImageButton editPencil;
+        View line;
 
-        RecyclerViewHolder(View view, final Context context){
+        RecyclerViewHolder(View view, final Context context){//CONTEXT ???
             super(view);
             name = (TextView) view.findViewById(R.id.transaction_name);
             date = (TextView) view.findViewById(R.id.transaction_date);
             price = (TextView) view.findViewById(R.id.transaction_price);
             imgView = (ImageView) view.findViewById(R.id.transaction_img);
             editPencil = (ImageButton) view.findViewById(R.id.editPencil);
-            editPencil.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    EditRecordDialog dialog = new EditRecordDialog();
-                    dialog.show(((Activity) context).getFragmentManager(), "Dialog");
-                }
-            });
+            line = view.findViewById(R.id.lineSeparator);
         }
     }
 }

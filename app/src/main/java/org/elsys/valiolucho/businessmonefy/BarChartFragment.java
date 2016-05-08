@@ -24,9 +24,7 @@ import java.util.ArrayList;
 public class BarChartFragment extends Fragment {
 
     BarChart barChart;
-    public BarChartFragment() {
-        // Required empty public constructor
-    }
+    public BarChartFragment() {}
 
 
     @Override
@@ -34,7 +32,7 @@ public class BarChartFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_bar_chart,container,false);
         Bundle bundle = getArguments();
-        String message = Integer.toString(bundle.getInt("chart"));
+        String message = Integer.toString(bundle.getInt("Chart"));
 
         barChart = (BarChart) view.findViewById(R.id.barChart);
         BarData data = new BarData(getXAxisValues(), getDataSet());

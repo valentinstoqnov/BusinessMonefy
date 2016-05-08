@@ -1,22 +1,22 @@
 package org.elsys.valiolucho.businessmonefy;
 
 public class DateHolder {
-    String startDate;
-    String endDate;
+    private String from;
+    private String to;
 
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
+    public void setFrom(String from) {
+        this.from = from + " 00:00:00";
     }
 
-    public String getStartDate() {
-        return startDate;
+    public void setTo(String to) {
+        this.to = to + " 23:59:59";
     }
 
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
+    public String getFrom() {
+        return from;
     }
 
-    public String getEndDate() {
-        return endDate;
+    public String getTo() {
+        return to;
     }
 }

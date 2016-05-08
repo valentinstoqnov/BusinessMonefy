@@ -7,7 +7,6 @@
     android:focusableInTouchMode="true">
 
     <ImageView
-        android:src="@drawable/tr_plus"
         android:id="@+id/transaction_img"
         android:layout_width="50dp"
         android:layout_height="50dp"
@@ -22,13 +21,11 @@
         android:paddingTop="5dp"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:text="JAJA"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@+id/transaction_img" />
 
     <TextView
-        android:text="2016/04/11"
         android:textSize="16sp"
         android:id="@+id/transaction_date"
         android:layout_width="wrap_content"
@@ -37,7 +34,6 @@
         android:layout_toEndOf="@+id/transaction_img"/>
 
     <TextView
-        android:text="100"
         android:textSize="20sp"
         android:textStyle="bold"
         android:layout_centerVertical="true"
@@ -71,8 +67,8 @@
     <View
         android:id="@+id/lineSeparator"
         android:layout_below="@+id/transaction_img"
+        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/colorTrPlus"/>
+        android:layout_height="2dp" />
 
 </RelativeLayout>

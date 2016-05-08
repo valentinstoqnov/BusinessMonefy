@@ -38,10 +38,12 @@ public class LogsAdapter extends ArrayAdapter{
     public int getCount() {
         return this.list.size();
     }
+
     @Override
     public Object getItem(int position) {
         return this.list.get(position);
     }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View row;
@@ -65,10 +67,10 @@ public class LogsAdapter extends ArrayAdapter{
         }
 
         Transaction tr = (Transaction) getItem(position);
-        holder.IMG.setImageResource(tr.getTransactionResource());
+        //holder.IMG.setImageResource(tr.getTransactionResource());
         holder.NAME.setText(tr.getName());
         holder.DATE.setText(tr.getDate());
-        holder.PRICE.setText(tr.getMoney());
+        holder.PRICE.setText(String.valueOf(tr.getMoney()));
         holder.CURRENCY.setText("$");//get currency from log file
         return row;
     }
