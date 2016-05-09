@@ -1,11 +1,5 @@
 package org.elsys.valiolucho.businessmonefy;
 
-import android.util.Log;
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-
 public class Transaction {
 
     private static final int MULTIPLIER = 100;

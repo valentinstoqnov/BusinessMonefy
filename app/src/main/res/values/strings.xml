@@ -33,7 +33,7 @@
     <string name="negative">+/-</string>
     <string name="backspace">"\u232B"</string>
 
-    <string name="editDialog">EDIT THE RECORD FROM\n</string>
+    <string name="editDialog">EDIT THE RECORD</string>
     <string name="saveED">Save</string>
     <string name="cancel">Cancel</string>
     <string name="name">Name</string>

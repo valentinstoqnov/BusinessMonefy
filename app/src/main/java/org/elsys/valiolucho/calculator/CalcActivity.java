@@ -28,7 +28,7 @@ public class CalcActivity extends AppCompatActivity {
     RelativeLayout relativeLayout;
     EditText nameET;
     EditText descriptionET;
-    private static final int REQUIRED_NAME_LENGTH = 3;
+    private static final int REQUIRED_NAME_LENGTH = 1;
     private static final int REQUIRED_DESCR_LENGTH = REQUIRED_NAME_LENGTH;
 
     DataBaseHelper myDb;
@@ -75,6 +75,7 @@ public class CalcActivity extends AppCompatActivity {
 
     private void leftSwipeListener(final boolean minus) {
         relativeLayout.setOnTouchListener(new OnSwipeTouchListener(CalcActivity.this) {
+            @Override
             public void onSwipeLeft() {
                 String name = nameET.getText().toString();
                 String description = descriptionET.getText().toString();

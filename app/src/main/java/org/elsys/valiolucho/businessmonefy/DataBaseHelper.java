@@ -73,7 +73,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void updateData(Transaction oldTransaction, Transaction newTransaction) {
+    public void updateData(Transaction newTransaction) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(NAME, newTransaction.getName());
@@ -82,7 +82,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         contentValues.put(MONEY, newTransaction.getSerializedMoney());
 
         String selection = DATE + " LIKE ?";
-        String[] selectionArgs = {oldTransaction.getDate()};
+        String[] selectionArgs = {newTransaction.getDate()};
 
         db.update(TABLE_NAME, contentValues, selection, selectionArgs);
         db.close();

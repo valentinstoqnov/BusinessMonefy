@@ -12,7 +12,7 @@
         android:textStyle="bold"
         android:gravity="center"
         android:textColor="@android:color/white"
-        android:background="#000"/>
+        android:background="@color/yellow"/>
 
     <EditText
         android:id="@+id/editTextName"

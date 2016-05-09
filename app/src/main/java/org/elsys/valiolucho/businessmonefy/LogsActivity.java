@@ -1,31 +1,19 @@
 package org.elsys.valiolucho.businessmonefy;
 
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.res.Resources;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 
 public class LogsActivity extends AppCompatActivity implements View.OnLongClickListener{
@@ -38,7 +26,7 @@ public class LogsActivity extends AppCompatActivity implements View.OnLongClickL
     private Spinner spinner;
     private ArrayAdapter<CharSequence> spinnerAdapter;
 
-    private DataBaseHelper myDbHelper;//= DataBaseHelper.getInstance(this);
+    private DataBaseHelper myDbHelper;
     private String order = "DESC";
 
     private DateHolder dateHolder;
@@ -51,8 +39,6 @@ public class LogsActivity extends AppCompatActivity implements View.OnLongClickL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        getSupportActionBar().hide();
         setContentView(R.layout.activity_logs);
         recyclerView = (RecyclerView) findViewById(R.id.logsRecyclerView);
         layoutManager = new LinearLayoutManager(this);
@@ -104,9 +90,10 @@ public class LogsActivity extends AppCompatActivity implements View.OnLongClickL
                 }else {
                     datepickerManager();
                 }
-                recyclerAdapter = new RecyclerAdapter(arrayList, getApplicationContext());
-                recyclerView.setAdapter(recyclerAdapter);
                 myDbHelper.close();
+                recyclerAdapter = new RecyclerAdapter(arrayList, LogsActivity.this);
+                recyclerView.setAdapter(recyclerAdapter);
+                swipeToDismiss();
             }
 
             @Override
@@ -116,6 +103,25 @@ public class LogsActivity extends AppCompatActivity implements View.OnLongClickL
             }
         });
         spinner.setAdapter(spinnerAdapter);
+    }
+
+    private void swipeToDismiss() {
+        ItemTouchHelper swipeToDismissTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                Transaction transaction = arrayList.get(viewHolder.getAdapterPosition());
+                arrayList.remove(viewHolder.getAdapterPosition());
+                myDbHelper.deleteData(transaction);
+                recyclerAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+            }
+        });
+        swipeToDismissTouchHelper.attachToRecyclerView(recyclerView);
     }
 
     private void datepickerManager() {
@@ -175,4 +181,5 @@ public class LogsActivity extends AppCompatActivity implements View.OnLongClickL
     public boolean onLongClick(View v) {
         return false;
     }
+
 }
