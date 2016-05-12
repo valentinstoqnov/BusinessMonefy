@@ -21,6 +21,7 @@ public class GraphicsActivity extends FragmentActivity {
     private ArrayList<Transaction> arrayList = new ArrayList<>();
     private String fromDate;
     private String toDate;
+    private static final String ORDER = "ASC";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +41,9 @@ public class GraphicsActivity extends FragmentActivity {
                 toDate = myDate.getCurrentDateTime();
                 myDbHelper = DataBaseHelper.getInstance(getApplicationContext());
                 if(itemText.equals(periodNames[0])) {
-                    ChartsSwipeAdapter chartsSwipeAdapter = new ChartsSwipeAdapter(getSupportFragmentManager());
+                    fromDate = myDate.getPreviousDateTime(toDate, "today");
+                    arrayList = myDbHelper.getSpecificData(ORDER, fromDate, toDate);
+                    ChartsSwipeAdapter chartsSwipeAdapter = new ChartsSwipeAdapter(getSupportFragmentManager(), arrayList, "today");
                     viewPager.setAdapter(chartsSwipeAdapter);
                 }else if(itemText.equals(periodNames[1])) {
 

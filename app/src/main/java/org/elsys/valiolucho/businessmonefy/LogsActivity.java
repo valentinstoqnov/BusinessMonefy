@@ -1,22 +1,28 @@
 package org.elsys.valiolucho.businessmonefy;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import org.joda.time.DateTime;
+
 import java.util.ArrayList;
 
-public class LogsActivity extends AppCompatActivity implements View.OnLongClickListener{
+public class LogsActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter recyclerAdapter;
@@ -34,11 +40,11 @@ public class LogsActivity extends AppCompatActivity implements View.OnLongClickL
     private String toDate;
     private String fromDate;
 
-    private Toolbar toolbar;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActionBar bar = getSupportActionBar();
+
         setContentView(R.layout.activity_logs);
         recyclerView = (RecyclerView) findViewById(R.id.logsRecyclerView);
         layoutManager = new LinearLayoutManager(this);
@@ -51,13 +57,49 @@ public class LogsActivity extends AppCompatActivity implements View.OnLongClickL
 
     }
 
+    /*private void tabsManager() {
+        ActionBar actionBar = getActionBar();
+        actionBar.setHomeButtonEnabled(false);
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        // For each of the sections in the app, add a tab to the action bar.
+        for (int i = 0; i < 3; i++) {
+            actionBar.addTab(
+                    actionBar.newTab()
+                            .setTabListener(this));
+        }
+    }*/
+
+    private void orderDialog() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(LogsActivity.this);
+        builder.setTitle(R.string.chooseOrder)
+                .setSingleChoiceItems(R.array.orderOptions, -1, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (which == 0) {
+                            order = "ASC";
+                        }else {
+                            order = "DESC";
+                        }
+                        dialog.dismiss();
+                    }
+                });
+        Dialog dialog = builder.create();
+        dialog.setCancelable(true);
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+    }
+
     private void spinnerManager() {
         spinner.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                LogsOrderDialog dialog = new LogsOrderDialog();
-                dialog.show(getFragmentManager(), "Dialog");
-                order = dialog.getOption();
+                orderDialog();
+                myDbHelper = DataBaseHelper.getInstance(getApplicationContext());
+                arrayList = myDbHelper.getSpecificData(order, fromDate, toDate);
+                myDbHelper.close();
+                recyclerAdapter = new RecyclerAdapter(arrayList, LogsActivity.this);
+                recyclerView.setAdapter(recyclerAdapter);
+                swipeToDismiss();
                 return false;
             }
         });
@@ -141,20 +183,26 @@ public class LogsActivity extends AppCompatActivity implements View.OnLongClickL
         fromDateET.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                org.elsys.valiolucho.businessmonefy.DatePickerDialog.which = true;
+                DatePicker datePicker = new DatePicker();
+                datePicker.which = true;
+                datePicker.show(getFragmentManager(), "datePicker");
+                /*org.elsys.valiolucho.businessmonefy.DatePickerDialog.which = true;
                 org.elsys.valiolucho.businessmonefy.DatePickerDialog dp = new org.elsys.valiolucho.businessmonefy.DatePickerDialog();
                 dp.setCancelable(true);
-                dp.show(getFragmentManager(), "DatePicker");
+                dp.show(getFragmentManager(), "DatePicker");*/
             }
         });
 
         toDateET.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                org.elsys.valiolucho.businessmonefy.DatePickerDialog.which = true;
+                DatePicker datePicker = new DatePicker();
+                datePicker.which = false;
+                datePicker.show(getFragmentManager(), "datePicker");
+                /*org.elsys.valiolucho.businessmonefy.DatePickerDialog.which = true;
                 org.elsys.valiolucho.businessmonefy.DatePickerDialog dp = new org.elsys.valiolucho.businessmonefy.DatePickerDialog();
                 dp.setCancelable(true);
-                dp.show(getFragmentManager(), "DatePicker");
+                dp.show(getFragmentManager(), "DatePicker");*/
             }
         });
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -162,7 +210,6 @@ public class LogsActivity extends AppCompatActivity implements View.OnLongClickL
             public void onClick(DialogInterface dialog, int which) {
                 fromDate = fromDateET.getText().toString();
                 toDate = toDateET.getText().toString();
-                dialog.dismiss();
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -177,9 +224,38 @@ public class LogsActivity extends AppCompatActivity implements View.OnLongClickL
         arrayList = myDbHelper.getSpecificData(order, fromDate, toDate);
     }
 
-    @Override
-    public boolean onLongClick(View v) {
-        return false;
+    public static class DatePicker extends DialogFragment implements android.app.DatePickerDialog.OnDateSetListener{
+
+        private TextView fromDate;
+        private TextView toDate;
+        public boolean which;
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            DateTime dateTime = new DateTime();
+            int year = dateTime.getYear();
+            int month = dateTime.getMonthOfYear();
+            int day = dateTime.getDayOfMonth();
+            LayoutInflater inflater = getActivity().getLayoutInflater();
+            View view = inflater.inflate(R.layout.date_picker_dialog_layout, null);
+            fromDate = (TextView) view.findViewById(R.id.fromDateTV);
+            toDate = (TextView) view.findViewById(R.id.toDateTV);
+            Log.d("sdsad", fromDate.getText().toString());
+            Log.d("sdsad", toDate.getText().toString());
+            return new android.app.DatePickerDialog(getActivity(), this, year, month, day);
+        }
+
+        @Override
+        public void onDateSet(android.widget.DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            String date;
+            if(which) {
+                date  = year + "-" + monthOfYear + "-" + dayOfMonth + " 00:00:00";
+                toDate.setText(date);
+            }else {
+                date = year + "-" + monthOfYear + "-" + dayOfMonth + " 23:59:59";
+                fromDate.setText(date);
+            }
+        }
     }
 
 }

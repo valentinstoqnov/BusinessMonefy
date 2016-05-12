@@ -88,8 +88,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-
-    //have to accept arraylist<Transaction>
     public void deleteData(Transaction transaction) {
         SQLiteDatabase db = getWritableDatabase();
         String selection = DATE + " LIKE ?";
@@ -102,20 +100,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
         sortOrder = DATE + " " + sortOrder;
         Cursor cursor = db.query(TABLE_NAME, new String[] {NAME, DESCRIPTION, DATE, MONEY}, null, null, null, null, sortOrder);
-        ArrayList<Transaction> arrayList = new ArrayList<>();
-        if(cursor != null && cursor.getCount() > 0) {
-            cursor.moveToFirst();
-            do {
-                Transaction transaction = new Transaction(cursor.getString(cursor.getColumnIndex(NAME)),
-                        cursor.getString(cursor.getColumnIndex(DESCRIPTION)),
-                        Transaction.getDeserializedMoney(cursor.getInt(cursor.getColumnIndex(MONEY))));
-
-                transaction.setDate(cursor.getString(cursor.getColumnIndex(DATE)));
-
-                arrayList.add(transaction);
-            } while (cursor.moveToNext());
-            cursor.close();
-        }
+        ArrayList<Transaction> arrayList = cursorToArrList(cursor);
         db.close();
         return arrayList;
     }
@@ -127,6 +112,24 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         String selection = DATE + " BETWEEN ? AND ?";
         String[] selectionArgs = {dateFrom, dateTo};
         Cursor cursor = db.query(TABLE_NAME, columns, selection, selectionArgs, null, null, sortORder);
+        ArrayList<Transaction> arrayList = cursorToArrList(cursor);
+        db.close();
+        return arrayList;
+    }
+
+    public ArrayList<Transaction> getIncomings(String sortORder, String dateFrom, String dateTo) {
+        SQLiteDatabase db = getReadableDatabase();
+        sortORder = DATE + " " + sortORder;
+        String[] columns = {NAME, DESCRIPTION, DATE, MONEY};
+        String selection = "(" + DATE + " BETWEEN ? AND ?) AND (" + MONEY + " > ?)";
+        String[] selectionArgs = {dateFrom, dateTo, "0"};
+        Cursor cursor = db.query(TABLE_NAME, columns, selection, selectionArgs, null, null, sortORder);
+        ArrayList<Transaction> arrayList = cursorToArrList(cursor);
+        db.close();
+        return  arrayList;
+    }
+
+    private ArrayList<Transaction> cursorToArrList(Cursor cursor) {
         ArrayList<Transaction> arrayList = new ArrayList<>();
         if(cursor != null && cursor.getCount() > 0) {
             cursor.moveToFirst();
@@ -139,7 +142,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
             cursor.close();
         }
-        db.close();
         return arrayList;
     }
 }

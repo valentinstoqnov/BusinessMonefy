@@ -1,13 +1,10 @@
 package org.elsys.valiolucho.businessmonefy;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -19,9 +16,18 @@ import java.util.ArrayList;
 public class LineChartFragment extends Fragment {
 
     private LineChart lineChart;
+    private DataProcess dataProcess;
+    private ArrayList<String> labels;
+    private ArrayList<Double> values;
+    private String period;
+    
+    public LineChartFragment() {}
 
-    public LineChartFragment() {
-        // Required empty public constructor
+    public void setData(DataProcess dataProcess) {
+        this.dataProcess = dataProcess;
+        this.labels = this.dataProcess.getLabels();
+        this.values = this.dataProcess.getValues();
+        this.period = this.dataProcess.getPeriod();
     }
 
     @Override
@@ -31,27 +37,15 @@ public class LineChartFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ArrayList<Entry> entries = new ArrayList<>();
-        entries.add(new Entry(4f, 0));
-        entries.add(new Entry(8f, 1));
-        entries.add(new Entry(6f, 2));
-        entries.add(new Entry(2f, 3));
-        entries.add(new Entry(18f, 4));
-        entries.add(new Entry(9f, 5));
-
-        LineDataSet dataset = new LineDataSet(entries, "Some label");
-
-        ArrayList<String> labels = new ArrayList<>();
-        labels.add("January");
-        labels.add("February");
-        labels.add("March");
-        labels.add("April");
-        labels.add("May");
-        labels.add("June");
-
+        int index = 0;
+        for (Double value : values) {
+            entries.add(new Entry(value.floatValue(), index));
+            index++;
+        }
+        LineDataSet dataset = new LineDataSet(entries, period);
+        
         LineData data = new LineData(labels, dataset);
         dataset.setColors(ColorTemplate.COLORFUL_COLORS);
         dataset.setDrawCubic(true);

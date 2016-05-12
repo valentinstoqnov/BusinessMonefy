@@ -5,13 +5,17 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-/**
- * Created by valen on 18.4.2016 г..
- */
+import java.util.ArrayList;
+
 public class ChartsSwipeAdapter extends FragmentPagerAdapter {
 
-    public ChartsSwipeAdapter(FragmentManager fm) {
+    private ArrayList<Transaction> data;
+    private DataProcess dataProcess;
+
+    public ChartsSwipeAdapter(FragmentManager fm, ArrayList<Transaction> data, String period) {
         super(fm);
+        this.data = data;
+        dataProcess = new DataProcess(data, period);
     }
 
     @Override
