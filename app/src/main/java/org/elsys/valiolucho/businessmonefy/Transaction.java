@@ -1,29 +1,31 @@
 package org.elsys.valiolucho.businessmonefy;
 
+import java.math.BigDecimal;
+
 public class Transaction {
 
-    private static final int MULTIPLIER = 100;
+    private static final BigDecimal TO_LOWEST_UNIT = new BigDecimal(100).setScale(2, BigDecimal.ROUND_HALF_EVEN);;
     private String name;
     private String description;
-    private double money;
+    private BigDecimal money;
     private String date;
-    //String category;
-
-    public int getSerializedMoney() {
-        return (int)(money * MULTIPLIER);
-    }
-
-    public static double getDeserializedMoney(int mny) {
-        return mny / MULTIPLIER;
-    }
 
 
-    public Transaction(String name, String description, double money) {
+
+    public Transaction(String name, String description, BigDecimal money) {
         this.name = name;
         this.description = description;
-        this.money = money;
+        this.money = money.setScale(2, BigDecimal.ROUND_HALF_EVEN);
     }
 
+    public static BigDecimal getMoneyAsInt(BigDecimal money){
+        return (money.multiply(TO_LOWEST_UNIT)).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+    }
+
+    public static BigDecimal getMoneyWithDecPoint(int mny) {
+        BigDecimal money = new BigDecimal(mny).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+        return (money.divide(TO_LOWEST_UNIT)).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+    }
 
     public void setDate() {
         this.date = new MyDate().getCurrentDateTime();
@@ -41,7 +43,7 @@ public class Transaction {
         return description;
     }
 
-    public double getMoney() {
+    public BigDecimal getMoney() {
         return money;
     }
 

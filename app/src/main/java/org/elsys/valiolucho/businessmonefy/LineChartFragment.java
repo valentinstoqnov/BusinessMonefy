@@ -16,32 +16,27 @@ import java.util.ArrayList;
 public class LineChartFragment extends Fragment {
 
     private LineChart lineChart;
-    private DataProcess dataProcess;
-    private ArrayList<String> labels;
-    private ArrayList<Double> values;
+    private float[] values;
+    private String[] labels;
     private String period;
     
     public LineChartFragment() {}
 
-    public void setData(DataProcess dataProcess) {
-        this.dataProcess = dataProcess;
-        this.labels = this.dataProcess.getLabels();
-        this.values = this.dataProcess.getValues();
-        this.period = this.dataProcess.getPeriod();
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Bundle bundle = getArguments();
+        values = bundle.getFloatArray("values");
+        labels = bundle.getStringArray("labels");
+        period = bundle.getString("period");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ArrayList<Entry> entries = new ArrayList<>();
         int index = 0;
-        for (Double value : values) {
-            entries.add(new Entry(value.floatValue(), index));
+        for (float value : values) {
+            entries.add(new Entry(value, index));
             index++;
         }
         LineDataSet dataset = new LineDataSet(entries, period);

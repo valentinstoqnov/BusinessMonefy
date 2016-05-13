@@ -41,4 +41,9 @@ public class MyDate {
         DateTime dateTime = formatter.parseDateTime(date);
         return dateTime.toString();
     }
+
+    public static String getTextMonth(String date) {
+        DateTime dateTime = new DateTime(date);
+        return dateTime.monthOfYear().getAsText();
+    }
 }

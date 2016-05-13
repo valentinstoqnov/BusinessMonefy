@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.RecyclerViewHolder> {
@@ -40,7 +41,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
         holder.name.setText(transaction.getName());
         holder.date.setText(transaction.getDate());
         holder.price.setText(String.valueOf(transaction.getMoney()));
-        if(transaction.getMoney() > 0) {
+        if(transaction.getMoney().compareTo(BigDecimal.ZERO) == 1) {
             holder.imgView.setImageResource(R.drawable.tr_plus);
             holder.line.setBackgroundColor(ContextCompat.getColor(context, R.color.colorTrPlus));
         }else{
@@ -79,8 +80,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
                     public void onClick(DialogInterface dialog, int id) {
                         String name = nameTV.getText().toString();
                         String description = descriptionTV.getText().toString();
-                        double money = Double.parseDouble(moneyTV.getText().toString());
-                        if (money == 0) {
+                        BigDecimal money = new BigDecimal(moneyTV.getText().toString());
+                        if (money.compareTo(BigDecimal.ZERO) == 0) {
                             Toast.makeText(context, "Money can not be 0", Toast.LENGTH_SHORT).show();
                             dialog.dismiss();
                         }

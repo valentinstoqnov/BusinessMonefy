@@ -2,6 +2,7 @@ package org.elsys.valiolucho.calculator;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -13,7 +14,7 @@ import org.elsys.valiolucho.businessmonefy.DataBaseHelper;
 import org.elsys.valiolucho.businessmonefy.OnSwipeTouchListener;
 import org.elsys.valiolucho.businessmonefy.R;
 import org.elsys.valiolucho.businessmonefy.Transaction;
-
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -22,7 +23,7 @@ public class CalcActivity extends AppCompatActivity {
     EditText calcDisplay;
     TextView viewDisplay;
     private ButtonClickListener buttonClick = new ButtonClickListener();
-    protected double numBuff;
+    protected BigDecimal numBuff = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_EVEN);;
     protected String operation;
 
     RelativeLayout relativeLayout;
@@ -59,14 +60,16 @@ public class CalcActivity extends AppCompatActivity {
             viewDisplay.setTextColor(Color.parseColor("#C85050"));
             for (int id: idList) {
                 View v = (View) findViewById(id);
-                v.setBackgroundColor(Color.parseColor("#C85050"));
+                v.setBackgroundColor(ContextCompat.getColor(this, R.color.colorTrMinus));
+                //v.setBackgroundColor(Color.parseColor("#C85050"));
                 v.setOnClickListener(buttonClick);
             }
         }else{
             viewDisplay.setTextColor(Color.parseColor("#62F464"));
             for (int id: idList) {
                 View v = (View) findViewById(id);
-                v.setBackgroundColor(Color.parseColor("#62F464"));
+                v.setBackgroundColor(ContextCompat.getColor(this, R.color.colorTrPlus));
+                //(Color.parseColor("#62F464"));
                 v.setOnClickListener(buttonClick);
             }
         }
@@ -79,9 +82,9 @@ public class CalcActivity extends AppCompatActivity {
             public void onSwipeLeft() {
                 String name = nameET.getText().toString();
                 String description = descriptionET.getText().toString();
-                double money = Double.parseDouble(viewDisplay.getText().toString());
+                BigDecimal money = new BigDecimal(viewDisplay.getText().toString());
                 if (minus) {
-                    money = -money;
+                    money = money.negate();
                 }
                 if(name.length() < REQUIRED_NAME_LENGTH) {
                     Toast.makeText(CalcActivity.this, "Name is too short", Toast.LENGTH_SHORT).show();
@@ -89,7 +92,7 @@ public class CalcActivity extends AppCompatActivity {
                     if(description.length() < REQUIRED_DESCR_LENGTH) {
                         Toast.makeText(CalcActivity.this, "Description is too short", Toast.LENGTH_SHORT).show();
                     }else{
-                        if(money == 0) {
+                        if(money.compareTo(BigDecimal.ZERO) == 0) {
                             Toast.makeText(CalcActivity.this, "Money can not be zero", Toast.LENGTH_SHORT).show();
                         }else {
                             Transaction transaction = new Transaction(name, description, money);
@@ -106,9 +109,9 @@ public class CalcActivity extends AppCompatActivity {
         });
     }
 
-    private double calculate(double val) {
+    private BigDecimal calculate(BigDecimal val) {
         Calculator calculator = new Calculator(numBuff, val);
-        double result = 0.0;
+        BigDecimal result = new BigDecimal(0.0).setScale(2, BigDecimal.ROUND_HALF_EVEN);;
         switch (operation) {
             case "+":
                 result = calculator.add();
@@ -122,9 +125,9 @@ public class CalcActivity extends AppCompatActivity {
             case "/":
                 result = calculator.div();
                 break;
-            case "%" :
+            /*case "%" :
                 result = calculator.percent();
-                break;
+                break;*/
             case "^" :
                 result = calculator.grad();
                 break;
@@ -132,15 +135,15 @@ public class CalcActivity extends AppCompatActivity {
         return result;
     }
 
-    private double calculate() {
+    private BigDecimal calculate() {
         Calculator calculator = new Calculator(numBuff);
-        double result = 0.0;
+        BigDecimal result;
         /*switch (operation) {
             case "sqrt" :
                 result = calculator.sqrt();
                 break;
             case "neg" :*/
-                result = calculator.neg();
+                result = calculator.neg().setScale(2, BigDecimal.ROUND_HALF_EVEN);;
                // break;
         //}
         return result;
@@ -158,7 +161,7 @@ public class CalcActivity extends AppCompatActivity {
                 case R.id.buttonDelete :
                     calcDisplay.setText("");
                     viewDisplay.setText("0");
-                    numBuff = 0;
+                    numBuff = BigDecimal.ZERO;
                     operation = "";
                     operationFlag = false;
                     equalFlag = false;
@@ -188,14 +191,14 @@ public class CalcActivity extends AppCompatActivity {
                 case R.id.buttonPlus :
                     //String vdisp = viewDisplay.getText().toString();
                     try{
-                        numBuff = Double.parseDouble(calcDisplay.getText().toString());
+                        numBuff = new BigDecimal(calcDisplay.getText().toString());
                     }catch (NumberFormatException nfe) {
                         Pattern pattern = Pattern.compile("\\d+|-\\d+");
                         Matcher matcher = pattern.matcher(viewDisplayCurr);
                         if(matcher.matches()) {
-                            numBuff = Double.parseDouble(viewDisplayCurr);
+                            numBuff = new BigDecimal(viewDisplayCurr);
                         }else{
-                            numBuff = 0;
+                            numBuff = BigDecimal.ZERO;
                             viewDisplayCurr = "0";
                         }
                     }
@@ -208,14 +211,14 @@ public class CalcActivity extends AppCompatActivity {
                 case R.id.buttonMinus :
                     //String vdisp = viewDisplay.getText().toString();
                     try{
-                        numBuff = Double.parseDouble(calcDisplay.getText().toString());
+                        numBuff = new BigDecimal(calcDisplay.getText().toString());
                     }catch (NumberFormatException nfe) {
                         Pattern pattern = Pattern.compile("\\d+|-\\d+");
                         Matcher matcher = pattern.matcher(viewDisplayCurr);
                         if(matcher.matches()) {
-                            numBuff = Double.parseDouble(viewDisplayCurr);
+                            numBuff = new BigDecimal(viewDisplayCurr);
                         }else{
-                            numBuff = 0;
+                            numBuff = BigDecimal.ZERO;
                             viewDisplayCurr = "0";
                         }
                     }
@@ -229,14 +232,14 @@ public class CalcActivity extends AppCompatActivity {
                 case R.id.buttonMultiply :
                     //String vdisp = viewDisplay.getText().toString();
                     try{
-                        numBuff = Double.parseDouble(calcDisplay.getText().toString());
+                        numBuff = new BigDecimal(calcDisplay.getText().toString());
                     }catch (NumberFormatException nfe) {
                         Pattern pattern = Pattern.compile("\\d+");
                         Matcher matcher = pattern.matcher(viewDisplayCurr);
                         if(matcher.matches()) {
-                            numBuff = Double.parseDouble(viewDisplayCurr);
+                            numBuff = new BigDecimal(viewDisplayCurr);
                         }else{
-                            numBuff = 0;
+                            numBuff = BigDecimal.ZERO;
                             viewDisplayCurr = "0";
                         }
                     }
@@ -250,14 +253,14 @@ public class CalcActivity extends AppCompatActivity {
                 case R.id.buttonDivide :
                     //String vdisp = viewDisplay.getText().toString();
                     try{
-                        numBuff = Double.parseDouble(calcDisplay.getText().toString());
+                        numBuff = new BigDecimal(calcDisplay.getText().toString());
                     }catch (NumberFormatException nfe) {
                         Pattern pattern = Pattern.compile("\\d+|-\\d+");
                         Matcher matcher = pattern.matcher(viewDisplayCurr);
                         if(matcher.matches()) {
-                            numBuff = Double.parseDouble(viewDisplayCurr);
+                            numBuff = new BigDecimal(viewDisplayCurr);
                         }else{
-                            numBuff = 0;
+                            numBuff = BigDecimal.ZERO;
                             viewDisplayCurr = "0";
                         }
                     }
@@ -293,16 +296,16 @@ public class CalcActivity extends AppCompatActivity {
                     operationFlag = true;
                     break;*/
                 case R.id.buttonEqual :
-                    double secondBuff = 0.0;
-                    double result = 0.0;
+                    BigDecimal secondBuff;
+                    BigDecimal result = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_EVEN);;
                     if(operation.equals("neg")) {
                         result = calculate();
                     }else{
                         try {
-                            secondBuff = Double.parseDouble(calcDisplay.getText().toString());
+                            secondBuff = new BigDecimal(calcDisplay.getText().toString()).setScale(2, BigDecimal.ROUND_HALF_EVEN);;
                             result = calculate(secondBuff);
                         } catch (NumberFormatException nfe) {
-                            String msg = String.format("Can not <%s>, <%s> with <%s>", operation, Double.toString(numBuff), calcDisplay.getText().toString());
+                            String msg = String.format("Can not <%s>, <%s> with <%s>", operation, numBuff.toString(), calcDisplay.getText().toString());
                             calcDisplay.setText(msg);
                         }
                     }
@@ -315,14 +318,14 @@ public class CalcActivity extends AppCompatActivity {
                 case R.id.buttonGradiation :
                     //String vdisp = viewDisplay.getText().toString();
                     try{
-                        numBuff = Double.parseDouble(calcDisplay.getText().toString());
+                        numBuff = new BigDecimal(calcDisplay.getText().toString());
                     }catch (NumberFormatException nfe) {
                         Pattern pattern = Pattern.compile("\\d+|-\\d+");
                         Matcher matcher = pattern.matcher(viewDisplayCurr);
                         if(matcher.matches()) {
-                            numBuff = Double.parseDouble(viewDisplayCurr);
+                            numBuff =new BigDecimal(viewDisplayCurr);
                         }else{
-                            numBuff = 0;
+                            numBuff = BigDecimal.ZERO;
                             viewDisplayCurr = "0";
                         }
                     }
@@ -335,14 +338,14 @@ public class CalcActivity extends AppCompatActivity {
                     break;
                 case R.id.buttonNegative :
                     try{
-                        numBuff = Double.parseDouble(calcDisplay.getText().toString());
+                        numBuff = new BigDecimal(calcDisplay.getText().toString());
                     }catch (NumberFormatException nfe) {
                         Pattern pattern = Pattern.compile("\\d+|-\\d+");
                         Matcher matcher = pattern.matcher(viewDisplayCurr);
                         if(matcher.matches()) {
-                            numBuff = Double.parseDouble(viewDisplayCurr);
+                            numBuff = new BigDecimal(viewDisplayCurr);
                         }else{
-                            numBuff = 0;
+                            numBuff = BigDecimal.ZERO;
                             viewDisplayCurr = "0";
                         }
                     }

@@ -6,8 +6,8 @@ public class DataProcess {
 
     private ArrayList<Transaction> data;
     private String period;
-    private ArrayList<Double> values;
-    private ArrayList<String> labels;
+    private float[] values;
+    private String[] labels;
 
     public DataProcess(ArrayList<Transaction> data, String period) {
         this.data = data;
@@ -17,24 +17,53 @@ public class DataProcess {
     }
 
     private void setValues() {
-        for(Transaction transaction : data) {
-            values.add(Transaction.getDeserializedMoney(transaction.getSerializedMoney()));//money
+        this.values = new float[data.size()];
+        for (int i = 0; i < data.size(); i++) {
+            Transaction transaction = data.get(i);
+            values[i] = transaction.getMoney().floatValue();
         }
     }
 
     private void setLabels() {
-        for(Transaction transaction : data) {
-            if (period.equals("today")) {
-                labels.add(transaction.getDate().substring(transaction.getDate().lastIndexOf(' ')));
+        this.labels = new String[data.size()];
+        if("today".equals(period) || "yesterday".equals(period)) {
+            labelTimeGetter();
+        }else if("week".equals(period)) {
+            //days
+            for(int i = 0; i < data.size(); i++) {
+                Transaction transaction = data.get(i);
+                String date = transaction.getDate();
+                int spaceIndex = date.lastIndexOf(' ');
+                labels[i] = date.substring(spaceIndex - 2, spaceIndex);
             }
+        }else if("month".equals(period)) {
+            //weeks
+        }else if("year".equals(period)) {
+            //months
+        }else {
+            //date 2016-02-10
         }
     }
 
-    public ArrayList<Double> getValues(){
+    private void labelTimeGetter() {
+        for (int i = 0; i < data.size(); i++) {
+            Transaction transaction = data.get(i);
+            labels[i] = transaction.getDate().substring(transaction.getDate().lastIndexOf(' '));
+        }
+    }
+
+    private void labelDateGetter() {
+        for (int i = 0; i < data.size(); i++) {
+            Transaction transaction = data.get(i);
+            labels[i] = transaction.getDate().substring(0, transaction.getDate().lastIndexOf(' '));
+        }
+    }
+
+    public float[] getValues(){
         return values;
     }
 
-    public ArrayList<String> getLabels() {
+    public String[] getLabels() {
         return labels;
     }
 

@@ -67,7 +67,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         contentValues.put(NAME, transaction.getName());
         contentValues.put(DESCRIPTION, transaction.getDescription());
         contentValues.put(DATE, transaction.getDate());
-        contentValues.put(MONEY, transaction.getSerializedMoney());
+        contentValues.put(MONEY, Transaction.getMoneyAsInt(transaction.getMoney()).intValue());
 
         db.insert(TABLE_NAME, null, contentValues);
         db.close();
@@ -79,7 +79,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         contentValues.put(NAME, newTransaction.getName());
         contentValues.put(DESCRIPTION, newTransaction.getDescription());
         contentValues.put(DATE, newTransaction.getDate());
-        contentValues.put(MONEY, newTransaction.getSerializedMoney());
+        contentValues.put(MONEY, Transaction.getMoneyAsInt(newTransaction.getMoney()).intValue());
 
         String selection = DATE + " LIKE ?";
         String[] selectionArgs = {newTransaction.getDate()};
@@ -136,7 +136,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             do {
                 Transaction transaction = new Transaction(cursor.getString(cursor.getColumnIndex(NAME)),
                         cursor.getString(cursor.getColumnIndex(DESCRIPTION)),
-                        Transaction.getDeserializedMoney(cursor.getInt(cursor.getColumnIndex(MONEY))));
+                        Transaction.getMoneyWithDecPoint(cursor.getInt(cursor.getColumnIndex(MONEY))));
                 transaction.setDate(cursor.getString(cursor.getColumnIndex(DATE)));
                 arrayList.add(transaction);
             } while (cursor.moveToNext());

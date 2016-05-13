@@ -9,12 +9,10 @@ import java.util.ArrayList;
 
 public class ChartsSwipeAdapter extends FragmentPagerAdapter {
 
-    private ArrayList<Transaction> data;
     private DataProcess dataProcess;
 
     public ChartsSwipeAdapter(FragmentManager fm, ArrayList<Transaction> data, String period) {
         super(fm);
-        this.data = data;
         dataProcess = new DataProcess(data, period);
     }
 
@@ -23,18 +21,21 @@ public class ChartsSwipeAdapter extends FragmentPagerAdapter {
         Fragment fr;
         switch (position) {
             case 0:
-                fr = new BarChartFragment();
+                fr = new LineChartFragment();
                 break;
             case 1:
                 fr = new PieChartFragment();
                 break;
             default:
-                fr = new LineChartFragment();
+                fr = new BarChartFragment();
                 break;
         }
 
         Bundle bundle = new Bundle();
         bundle.putInt("Chart", position + 1);
+        bundle.putFloatArray("values", dataProcess.getValues());
+        bundle.putStringArray("labels", dataProcess.getLabels());
+        bundle.putString("period", dataProcess.getPeriod());
         fr.setArguments(bundle);
 
         return fr;
