@@ -2,9 +2,11 @@ package org.elsys.valiolucho.businessmonefy;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -15,8 +17,11 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import org.elsys.valiolucho.calculator.CalcActivity;
+
+import java.math.BigDecimal;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -26,15 +31,43 @@ public class HomeActivity extends AppCompatActivity {
     private ImageButton plusImageButton;
     private ImageButton minusImageButton;
 
+    private TextView incomeTV;
+    private TextView outcomeTV;
+    private TextView totalTV;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        textViewsManager();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-        /*DataBaseHelper myDb = DataBaseHelper.getInstance(getApplicationContext());
-        myDb.deleteTable();
-        myDb.close();*/
+        setContentView(R.layout.activity_home);;
+        incomeTV = (TextView) findViewById(R.id.incomeTV);
+        outcomeTV = (TextView) findViewById(R.id.outcomeTV);
+        totalTV = (TextView) findViewById(R.id.totalTV);
+        textViewsManager();
         onClickButtonListeners();
         onClickImageButtonsListeners();
+    }
+
+    private void textViewsManager() {
+        DataBaseHelper myDb = DataBaseHelper.getInstance(getApplicationContext());
+        DataProcess dataProcess = new DataProcess(myDb.getAllData("ASC"));
+        myDb.close();
+        BigDecimal incomings = dataProcess.getIncomings();
+        BigDecimal outcomings = dataProcess.getOutcomings();
+        incomeTV.setText(incomings.toPlainString());
+        outcomeTV.setText(outcomings.toPlainString());
+        BigDecimal total = (((incomings.subtract(outcomings.negate())).setScale(2, BigDecimal.ROUND_HALF_EVEN)).stripTrailingZeros());
+        if (total.compareTo(BigDecimal.ZERO) == 1) {
+            totalTV.setTextColor(ContextCompat.getColor(this, R.color.colorTrPlus));
+        }else if(total.compareTo(BigDecimal.ZERO) == -1) {
+            totalTV.setTextColor(ContextCompat.getColor(this, R.color.colorTrMinus));
+        }
+        totalTV.setText(total.toPlainString());
     }
 
     //make SHOW GRAPHICS and SHOW LOGS buttons, initialization and set onClickListener

@@ -1,5 +1,6 @@
 package org.elsys.valiolucho.businessmonefy;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class DataProcess {
@@ -14,6 +15,32 @@ public class DataProcess {
         this.period = period;
         setValues();
         setLabels();
+    }
+
+    public DataProcess(ArrayList<Transaction> data) {
+        this.data = data;
+    }
+
+    public BigDecimal getIncomings() {
+        BigDecimal incomingSum = BigDecimal.ZERO;
+        for (Transaction transaction : data) {
+            BigDecimal money = transaction.getMoney();
+            if(money.compareTo(BigDecimal.ZERO) == 1) {
+                incomingSum = incomingSum.add(money);
+            }
+        }
+        return incomingSum.setScale(2, BigDecimal.ROUND_HALF_EVEN).stripTrailingZeros();
+    }
+
+    public BigDecimal getOutcomings() {
+        BigDecimal outcomingSum = BigDecimal.ZERO;
+        for (Transaction transaction : data) {
+            BigDecimal money = transaction.getMoney();
+            if(money.compareTo(BigDecimal.ZERO) == -1) {
+                outcomingSum = outcomingSum.add(money);
+            }
+        }
+        return outcomingSum.setScale(2, BigDecimal.ROUND_HALF_EVEN).stripTrailingZeros();
     }
 
     private void setValues() {

@@ -32,7 +32,7 @@ public class Calculator {
     }
 
     public BigDecimal div() {
-        return val1.divide(val2);
+        return val1.divide(val2, 2);
     }
 
     public BigDecimal grad() {

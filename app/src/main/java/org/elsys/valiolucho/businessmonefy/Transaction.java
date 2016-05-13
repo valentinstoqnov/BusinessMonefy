@@ -19,12 +19,12 @@ public class Transaction {
     }
 
     public static BigDecimal getMoneyAsInt(BigDecimal money){
-        return (money.multiply(TO_LOWEST_UNIT)).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+        return (money.multiply(TO_LOWEST_UNIT)).setScale(2, BigDecimal.ROUND_HALF_EVEN).stripTrailingZeros();
     }
 
     public static BigDecimal getMoneyWithDecPoint(int mny) {
         BigDecimal money = new BigDecimal(mny).setScale(2, BigDecimal.ROUND_HALF_EVEN);
-        return (money.divide(TO_LOWEST_UNIT)).setScale(2, BigDecimal.ROUND_HALF_EVEN);
+        return (money.divide(TO_LOWEST_UNIT)).setScale(2, BigDecimal.ROUND_HALF_EVEN).stripTrailingZeros();
     }
 
     public void setDate() {
@@ -44,7 +44,7 @@ public class Transaction {
     }
 
     public BigDecimal getMoney() {
-        return money;
+        return money.stripTrailingZeros();
     }
 
     public String getDate() {

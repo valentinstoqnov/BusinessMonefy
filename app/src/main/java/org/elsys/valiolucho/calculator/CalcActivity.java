@@ -1,5 +1,6 @@
 package org.elsys.valiolucho.calculator;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -11,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import org.elsys.valiolucho.businessmonefy.DataBaseHelper;
+import org.elsys.valiolucho.businessmonefy.HomeActivity;
 import org.elsys.valiolucho.businessmonefy.OnSwipeTouchListener;
 import org.elsys.valiolucho.businessmonefy.R;
 import org.elsys.valiolucho.businessmonefy.Transaction;
