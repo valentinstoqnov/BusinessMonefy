@@ -8,12 +8,14 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,6 +55,40 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
             @Override
             public void onClick(View v) {
                 editDialog(position);
+            }
+        });
+        holder.imgView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                PopupWindow popupWindow = new PopupWindow();
+                if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                    LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    //getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+                    View popupView = layoutInflater.inflate(R.layout.info_dialog_layout, null);
+                    TextView infoTV = (TextView) popupView.findViewById(R.id.infoBarTV);
+                    TextView nameTV = (TextView) popupView.findViewById(R.id.nameTV);
+                    TextView descrTV = (TextView) popupView.findViewById(R.id.descrTV);
+                    TextView dateTV = (TextView) popupView.findViewById(R.id.dateTV);
+                    TextView moneyTV = (TextView) popupView.findViewById(R.id.moneyTV);
+                    Transaction transaction = arrayList.get(position);
+                    BigDecimal money = transaction.getMoney();
+                    if (money.compareTo(BigDecimal.ZERO) == 1) {
+                        infoTV.setBackgroundColor(ContextCompat.getColor(context, R.color.colorTrPlus));
+                        popupView.setBackgroundColor(ContextCompat.getColor(context, R.color.lightGreen));
+                    } else {
+                        infoTV.setBackgroundColor(ContextCompat.getColor(context, R.color.colorTrMinus));
+                        popupView.setBackgroundColor(ContextCompat.getColor(context, R.color.lightRed));
+                    }
+                    nameTV.setText(transaction.getName());
+                    descrTV.setText(transaction.getDescription());
+                    dateTV.setText(transaction.getDate());
+                    moneyTV.setText(money.toPlainString());
+                    popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    popupWindow.showAtLocation(popupView, Gravity.CENTER_VERTICAL, 0, 0);
+                }else{
+                    popupWindow.dismiss();
+                }
+                return false;
             }
         });
     }
@@ -131,7 +167,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
         dialog.show();
     }
 
-    public static class RecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnTouchListener {
+    public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
         TextView name, date, price;
         ImageView imgView;
@@ -140,28 +176,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
 
         RecyclerViewHolder(View view, final Context context){
             super(view);
-            view.setOnTouchListener(this);
             name = (TextView) view.findViewById(R.id.transaction_name);
             date = (TextView) view.findViewById(R.id.transaction_date);
             price = (TextView) view.findViewById(R.id.transaction_price);
             imgView = (ImageView) view.findViewById(R.id.transaction_img);
             editPencil = (ImageButton) view.findViewById(R.id.editPencil);
             line = view.findViewById(R.id.lineSeparator);
-        }
-
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            switch(event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    // The user just touched the screen
-                        //on touch
-                    break;
-                case MotionEvent.ACTION_UP:
-                    // The touch just ended
-                        //on release
-                    break;
-            }
-            return false;
         }
     }
 }
