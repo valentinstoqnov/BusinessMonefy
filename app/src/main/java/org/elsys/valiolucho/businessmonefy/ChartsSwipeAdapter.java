@@ -3,11 +3,12 @@ package org.elsys.valiolucho.businessmonefy;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.Log;
 
 import java.util.ArrayList;
 
-public class ChartsSwipeAdapter extends FragmentPagerAdapter {
+public class ChartsSwipeAdapter extends FragmentStatePagerAdapter {
 
     private DataProcess dataProcess;
 
@@ -32,12 +33,10 @@ public class ChartsSwipeAdapter extends FragmentPagerAdapter {
         }
 
         Bundle bundle = new Bundle();
-        bundle.putInt("Chart", position + 1);
         bundle.putFloatArray("values", dataProcess.getValues());
         bundle.putStringArray("labels", dataProcess.getLabels());
         bundle.putString("period", dataProcess.getPeriod());
         fr.setArguments(bundle);
-
         return fr;
     }
 

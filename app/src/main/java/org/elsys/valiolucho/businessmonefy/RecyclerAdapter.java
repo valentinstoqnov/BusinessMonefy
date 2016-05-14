@@ -91,6 +91,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
                         myDbHelper.updateData(newTransaction);
                         myDbHelper.close();
                         Toast.makeText(context, "Record is changed!", Toast.LENGTH_SHORT).show();
+                        arrayList.remove(oldTransaction);
                         arrayList.add(position, newTransaction);
                         notifyItemChanged(position);
                     }

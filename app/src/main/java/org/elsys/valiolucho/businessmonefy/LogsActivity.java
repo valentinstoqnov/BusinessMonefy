@@ -114,18 +114,24 @@ public class LogsActivity extends AppCompatActivity {
                 myDbHelper = DataBaseHelper.getInstance(getApplicationContext());
                 if(itemText.equals(periodNames[0])) {
                     fromDate = myDate.getPreviousDateTime(toDate, "today");
+                    toDate = myDate.getCurrentDateTime();
                     arrayList = myDbHelper.getSpecificData(order, fromDate, toDate);
                 }else if(itemText.equals(periodNames[1])){
-                    fromDate = myDate.getPreviousDateTime(toDate, "day");
+                    fromDate = myDate.getPreviousDateTime(toDate, "yesterday");
+                    toDate = fromDate;
+                    toDate = myDate.getPreviousDateTime(toDate, "endDay");
                     arrayList = myDbHelper.getSpecificData(order, fromDate, toDate);
                 }else if(itemText.equals(periodNames[2])) {
                     fromDate = myDate.getPreviousDateTime(toDate, "week");
+                    toDate = myDate.getCurrentDateTime();
                     arrayList = myDbHelper.getSpecificData(order, fromDate, toDate);
                 }else if(itemText.equals(periodNames[3])) {
                     fromDate = myDate.getPreviousDateTime(toDate, "month");
+                    toDate = myDate.getCurrentDateTime();
                     arrayList = myDbHelper.getSpecificData(order, fromDate, toDate);
                 }else if(itemText.equals(periodNames[4])) {
                     fromDate = myDate.getPreviousDateTime(toDate, "year");
+                    toDate = myDate.getCurrentDateTime();
                     arrayList = myDbHelper.getSpecificData(order, fromDate, toDate);
                 }else if(itemText.equals(periodNames[5])) {
                     arrayList = myDbHelper.getAllData(order);

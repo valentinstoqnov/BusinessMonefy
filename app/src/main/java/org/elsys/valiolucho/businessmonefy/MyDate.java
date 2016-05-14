@@ -22,8 +22,9 @@ public class MyDate {
         DateTime dateTime = formatter.parseDateTime(date);
         if("today".equals(period)) {
             dateTime = dateTime.withTimeAtStartOfDay();
-        }else if ("day".equals(period)) {
+        }else if ("yesterday".equals(period)) {
             dateTime = dateTime.minusDays(1);
+            dateTime = dateTime.withTimeAtStartOfDay();
         }else if ("week".equals(period)){
             dateTime = dateTime.minusWeeks(1);
         }else if ("month".equals(period)) {
@@ -31,7 +32,7 @@ public class MyDate {
         }else if ("year".equals(period)) {
             dateTime = dateTime.minusYears(1);
         }else if("endDay".equals(period)) {
-            dateTime.withHourOfDay(23).withMinuteOfHour(59).withSecondOfMinute(59);
+            dateTime = dateTime.withHourOfDay(23).withMinuteOfHour(59).withSecondOfMinute(59);
         }
         return formatter.print(dateTime);
     }

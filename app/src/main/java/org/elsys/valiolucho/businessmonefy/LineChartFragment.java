@@ -2,6 +2,7 @@ package org.elsys.valiolucho.businessmonefy;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 
-public class LineChartFragment extends Fragment {
+public class LineChartFragment extends Fragment{
 
     private LineChart lineChart;
     private float[] values;
@@ -52,5 +53,4 @@ public class LineChartFragment extends Fragment {
         lineChart.animateY(2000);
         return view;
     }
-
 }
