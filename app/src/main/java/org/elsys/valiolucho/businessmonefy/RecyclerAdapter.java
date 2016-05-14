@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -61,8 +62,31 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
         return arrayList.size();
     }
 
+    private void infoCheckDialog(final int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        LayoutInflater inflater = ((Activity)context).getLayoutInflater();
+        View view = inflater.inflate(R.layout.info_dialog_layout, null);
+        TextView infoTV = (TextView) view.findViewById(R.id.infoBarTV);
+        TextView nameTV = (TextView) view.findViewById(R.id.nameTV);
+        TextView descrTV = (TextView) view.findViewById(R.id.descrTV);
+        TextView dateTV = (TextView) view.findViewById(R.id.dateTV);
+        TextView moneyTV = (TextView) view.findViewById(R.id.moneyTV);
+        Transaction transaction = arrayList.get(position);
+        BigDecimal money = transaction.getMoney();
+        if(money.compareTo(BigDecimal.ZERO) == 1) {
+            infoTV.setBackgroundColor(ContextCompat.getColor(context, R.color.colorTrPlus));
+        }else {
+            infoTV.setBackgroundColor(ContextCompat.getColor(context, R.color.colorTrMinus));
+        }
+        nameTV.setText(transaction.getName());
+        descrTV.setText(transaction.getDescription());
+        dateTV.setText(transaction.getDate());
+        moneyTV.setText(money.toPlainString());
+        Dialog dialog = builder.create();
+        dialog.show();
+    }
 
-    private void editDialog(final int position) {
+    protected void editDialog(final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         final LayoutInflater inflater = ((Activity)context).getLayoutInflater();
         View view = inflater.inflate(R.layout.edit_dialog, null);
@@ -107,7 +131,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
         dialog.show();
     }
 
-    public static class RecyclerViewHolder extends RecyclerView.ViewHolder{
+    public static class RecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnTouchListener {
 
         TextView name, date, price;
         ImageView imgView;
@@ -116,12 +140,28 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
 
         RecyclerViewHolder(View view, final Context context){
             super(view);
+            view.setOnTouchListener(this);
             name = (TextView) view.findViewById(R.id.transaction_name);
             date = (TextView) view.findViewById(R.id.transaction_date);
             price = (TextView) view.findViewById(R.id.transaction_price);
             imgView = (ImageView) view.findViewById(R.id.transaction_img);
             editPencil = (ImageButton) view.findViewById(R.id.editPencil);
             line = view.findViewById(R.id.lineSeparator);
+        }
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            switch(event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    // The user just touched the screen
+                        //on touch
+                    break;
+                case MotionEvent.ACTION_UP:
+                    // The touch just ended
+                        //on release
+                    break;
+            }
+            return false;
         }
     }
 }

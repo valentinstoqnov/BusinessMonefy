@@ -62,4 +62,5 @@
     <string name="finish">Finish</string>
 
     <string name="dateTxtView">"Press to set date"</string>
+    <string name="information">Information</string>
 </resources>
