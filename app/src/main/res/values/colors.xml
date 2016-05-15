@@ -8,4 +8,7 @@
     <color name="lightRed">#ff6666</color>
     <color name="colorTrMinus">#F44336</color>
     <color name="yellow">#FFFF99</color>
+    <color name="backgroung">#DCEDC8</color>
+    <color name="NavDrBackGr">#E0E0E0</color>
+    <color name="buttonColors">#4DB6AC</color>
 </resources>

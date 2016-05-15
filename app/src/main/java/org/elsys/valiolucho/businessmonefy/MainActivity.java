@@ -1,13 +1,14 @@
 package org.elsys.valiolucho.businessmonefy;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,17 +16,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-
 import net.rdrei.android.dirchooser.DirectoryChooserConfig;
 import net.rdrei.android.dirchooser.DirectoryChooserFragment;
-
-import org.elsys.valiolucho.calculator.CalcActivity;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
@@ -61,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setBackgroundColor(ContextCompat.getColor(this, R.color.NavDrBackGr));
         navigationView.setNavigationItemSelectedListener(this);
 
         incomeTV = (TextView) findViewById(R.id.incomeTV);
@@ -110,11 +107,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void onClickImageButtonsListeners() {
+        final Vibrator vibe = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         plusImageButton = (ImageButton) findViewById(R.id.imageButtonPlus);
         plusImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent plusActivityIntent = new Intent(MainActivity.this, CalcActivity.class);
+                vibe.vibrate(30);
                 startActivity(plusActivityIntent);
             }
         });
@@ -125,6 +124,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onClick(View v) {
                 Intent minusActivityIntent = new Intent(MainActivity.this, CalcActivity.class);
                 minusActivityIntent.putExtra("minus", true);
+                vibe.vibrate(30);
                 startActivity(minusActivityIntent);
             }
         });
@@ -140,9 +140,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    @Override
+   /* @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        //for future settings . . .
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
@@ -160,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
     private ArrayList<Transaction> getDatabase() {
         DataBaseHelper myDbHelper = DataBaseHelper.getInstance(getApplicationContext());
@@ -169,10 +170,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return data;
     }
 
-    private String dir = getApplicationContext().getFilesDir().getAbsolutePath();
+    private String dir;
     private DirectoryChooserFragment mDialog;
 
     private String getDir() {
+        dir = getApplicationContext().getFilesDir().getAbsolutePath();
         DirectoryChooserConfig config = DirectoryChooserConfig.builder()
                 .newDirectoryName("BusinessMonefy")
                 .build();
@@ -218,12 +220,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             });
             builder.create().show();
         } else if (id == R.id.nav_saveCSV) {
+            dir = getDir();
             CsvGenerator csvGenerator = new CsvGenerator("BusinessMonefyDB.csv", dir, getDatabase(), this);
             csvGenerator.generate();
         } else if (id == R.id.nav_saveXLS) {
+            dir = getDir();
             XlsGenerator xlsGenerator = new XlsGenerator("BusinessMonefyDB.xls", dir, getDatabase(), this);
             xlsGenerator.generate();
         } else if (id == R.id.nav_exit) {
+            Log.d("exit = = ", "adsad");
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Exit ...");
             builder.setMessage("Are you sure ?");
@@ -240,6 +245,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     System.exit(0);
                 }
             });
+            builder.create().show();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

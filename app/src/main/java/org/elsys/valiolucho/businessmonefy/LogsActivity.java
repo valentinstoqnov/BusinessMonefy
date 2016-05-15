@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,6 +22,7 @@ import android.widget.TextView;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class LogsActivity extends AppCompatActivity {
 
@@ -43,8 +45,6 @@ public class LogsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActionBar bar = getSupportActionBar();
-
         setContentView(R.layout.activity_logs);
         recyclerView = (RecyclerView) findViewById(R.id.logsRecyclerView);
         layoutManager = new LinearLayoutManager(this);
@@ -54,20 +54,7 @@ public class LogsActivity extends AppCompatActivity {
         spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.periodNames, android.R.layout.simple_spinner_item);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerManager();
-
     }
-
-    /*private void tabsManager() {
-        ActionBar actionBar = getActionBar();
-        actionBar.setHomeButtonEnabled(false);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        // For each of the sections in the app, add a tab to the action bar.
-        for (int i = 0; i < 3; i++) {
-            actionBar.addTab(
-                    actionBar.newTab()
-                            .setTabListener(this));
-        }
-    }*/
 
     private void orderDialog() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(LogsActivity.this);
@@ -90,16 +77,17 @@ public class LogsActivity extends AppCompatActivity {
     }
 
     private void spinnerManager() {
+        spinner.setPopupBackgroundDrawable(ContextCompat.getDrawable(this, R.color.lightGreen));
         spinner.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
+                Log.d("sadasd", "dasda");
                 orderDialog();
-                myDbHelper = DataBaseHelper.getInstance(getApplicationContext());
-                arrayList = myDbHelper.getSpecificData(order, fromDate, toDate);
-                myDbHelper.close();
-                recyclerAdapter = new RecyclerAdapter(arrayList, LogsActivity.this);
-                recyclerView.setAdapter(recyclerAdapter);
-                swipeToDismiss();
+                if(arrayList != null) {
+                    Collections.reverse(arrayList);
+                    recyclerAdapter.notifyDataSetChanged();
+                    return true;
+                }
                 return false;
             }
         });
@@ -172,50 +160,48 @@ public class LogsActivity extends AppCompatActivity {
         swipeToDismissTouchHelper.attachToRecyclerView(recyclerView);
     }
 
+    protected static TextView fromDateTV;
+    protected static TextView toDateTV;
+
     private void datepickerManager() {
         LayoutInflater inflater = LayoutInflater.from(LogsActivity.this);
         final View dialogView = inflater.inflate(R.layout.date_picker_dialog_layout, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(LogsActivity.this);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(LogsActivity.this);
         builder.setView(dialogView);
-        builder.setTitle("Choose two dates");
-        final TextView fromDateET;
-        final TextView toDateET;
-        fromDateET = (TextView) dialogView.findViewById(R.id.fromDateTV);
-        toDateET = (TextView) dialogView.findViewById(R.id.toDateTV);
+        fromDateTV = (TextView) dialogView.findViewById(R.id.fromDateTV);
+        toDateTV = (TextView) dialogView.findViewById(R.id.toDateTV);
         String text = getResources().getString(R.string.one) + ". " + getResources().getString(R.string.dateTxtView);
-        fromDateET.setText(text);
+        fromDateTV.setText(text);
         text = getResources().getString(R.string.two) + ". " + getResources().getString(R.string.dateTxtView);
-        toDateET.setText(text);
-        fromDateET.setOnClickListener(new View.OnClickListener() {
+        toDateTV.setText(text);
+        fromDateTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DatePicker datePicker = new DatePicker();
-                datePicker.which = true;
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("which", true);
+                datePicker.setArguments(bundle);
                 datePicker.show(getFragmentManager(), "datePicker");
-                /*org.elsys.valiolucho.businessmonefy.DatePickerDialog.which = true;
-                org.elsys.valiolucho.businessmonefy.DatePickerDialog dp = new org.elsys.valiolucho.businessmonefy.DatePickerDialog();
-                dp.setCancelable(true);
-                dp.show(getFragmentManager(), "DatePicker");*/
             }
         });
 
-        toDateET.setOnClickListener(new View.OnClickListener() {
+        toDateTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DatePicker datePicker = new DatePicker();
-                datePicker.which = false;
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("which", false);
+                datePicker.setArguments(bundle);
                 datePicker.show(getFragmentManager(), "datePicker");
-                /*org.elsys.valiolucho.businessmonefy.DatePickerDialog.which = true;
-                org.elsys.valiolucho.businessmonefy.DatePickerDialog dp = new org.elsys.valiolucho.businessmonefy.DatePickerDialog();
-                dp.setCancelable(true);
-                dp.show(getFragmentManager(), "DatePicker");*/
             }
         });
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                fromDate = fromDateET.getText().toString();
-                toDate = toDateET.getText().toString();
+                fromDate = fromDateTV.getText().toString();
+                toDate = toDateTV.getText().toString();
+                arrayList = myDbHelper.getSpecificData(order, fromDate, toDate);
+                recyclerAdapter.notifyDataSetChanged();
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -227,14 +213,11 @@ public class LogsActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.setCanceledOnTouchOutside(true);
         dialog.show();
-        arrayList = myDbHelper.getSpecificData(order, fromDate, toDate);
     }
 
     public static class DatePicker extends DialogFragment implements android.app.DatePickerDialog.OnDateSetListener{
 
-        private TextView fromDate;
-        private TextView toDate;
-        public boolean which;
+        private boolean which;
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -242,24 +225,32 @@ public class LogsActivity extends AppCompatActivity {
             int year = dateTime.getYear();
             int month = dateTime.getMonthOfYear();
             int day = dateTime.getDayOfMonth();
-            LayoutInflater inflater = getActivity().getLayoutInflater();
-            View view = inflater.inflate(R.layout.date_picker_dialog_layout, null);
-            fromDate = (TextView) view.findViewById(R.id.fromDateTV);
-            toDate = (TextView) view.findViewById(R.id.toDateTV);
-            Log.d("sdsad", fromDate.getText().toString());
-            Log.d("sdsad", toDate.getText().toString());
+
+            Bundle bundle = getArguments();
+            which = bundle.getBoolean("which");
             return new android.app.DatePickerDialog(getActivity(), this, year, month, day);
         }
 
         @Override
         public void onDateSet(android.widget.DatePicker view, int year, int monthOfYear, int dayOfMonth) {
             String date;
+            String month = String.valueOf(monthOfYear + 1);
+            String day = String.valueOf(dayOfMonth);
+
+            if(monthOfYear < 10) {
+                month = "0" + month;
+            }
+
+            if(dayOfMonth < 10) {
+                date = "0" + day;
+            }
+
             if(which) {
-                date  = year + "-" + monthOfYear + "-" + dayOfMonth + " 00:00:00";
-                toDate.setText(date);
+                date  = year + "-" + month + "-" + day + " 00:00:00";
+                fromDateTV.setText(date);
             }else {
-                date = year + "-" + monthOfYear + "-" + dayOfMonth + " 23:59:59";
-                fromDate.setText(date);
+                date = year + "-" + month + "-" + day + " 23:59:59";
+                toDateTV.setText(date);
             }
         }
     }

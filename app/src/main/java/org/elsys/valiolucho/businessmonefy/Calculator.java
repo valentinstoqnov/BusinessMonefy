@@ -1,4 +1,4 @@
-package org.elsys.valiolucho.calculator;
+package org.elsys.valiolucho.businessmonefy;
 
 import java.math.BigDecimal;
 

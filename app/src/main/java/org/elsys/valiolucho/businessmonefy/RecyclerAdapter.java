@@ -57,38 +57,36 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
                 editDialog(position);
             }
         });
-        holder.imgView.setOnTouchListener(new View.OnTouchListener() {
+        holder.imgView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                PopupWindow popupWindow = new PopupWindow();
-                if(event.getAction() == MotionEvent.ACTION_DOWN) {
-                    LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                    //getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-                    View popupView = layoutInflater.inflate(R.layout.info_dialog_layout, null);
-                    TextView infoTV = (TextView) popupView.findViewById(R.id.infoBarTV);
-                    TextView nameTV = (TextView) popupView.findViewById(R.id.nameTV);
-                    TextView descrTV = (TextView) popupView.findViewById(R.id.descrTV);
-                    TextView dateTV = (TextView) popupView.findViewById(R.id.dateTV);
-                    TextView moneyTV = (TextView) popupView.findViewById(R.id.moneyTV);
-                    Transaction transaction = arrayList.get(position);
-                    BigDecimal money = transaction.getMoney();
-                    if (money.compareTo(BigDecimal.ZERO) == 1) {
-                        infoTV.setBackgroundColor(ContextCompat.getColor(context, R.color.colorTrPlus));
-                        popupView.setBackgroundColor(ContextCompat.getColor(context, R.color.lightGreen));
-                    } else {
-                        infoTV.setBackgroundColor(ContextCompat.getColor(context, R.color.colorTrMinus));
-                        popupView.setBackgroundColor(ContextCompat.getColor(context, R.color.lightRed));
-                    }
-                    nameTV.setText(transaction.getName());
-                    descrTV.setText(transaction.getDescription());
-                    dateTV.setText(transaction.getDate());
-                    moneyTV.setText(money.toPlainString());
-                    popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    popupWindow.showAtLocation(popupView, Gravity.CENTER_VERTICAL, 0, 0);
-                }else{
-                    popupWindow.dismiss();
+            public void onClick(View v) {
+                LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View view = layoutInflater.inflate(R.layout.info_dialog_layout, null);
+                TextView infoTV = (TextView) view.findViewById(R.id.infoBarTV);
+                TextView nameTV = (TextView) view.findViewById(R.id.nameTV);
+                TextView descrTV = (TextView) view.findViewById(R.id.descrTV);
+                TextView dateTV = (TextView) view.findViewById(R.id.dateTV);
+                TextView moneyTV = (TextView) view.findViewById(R.id.moneyTV);
+                Transaction transaction = arrayList.get(position);
+                BigDecimal money = transaction.getMoney();
+                if (money.compareTo(BigDecimal.ZERO) == 1) {
+                    infoTV.setBackgroundColor(ContextCompat.getColor(context, R.color.colorTrPlus));
+                    view.setBackgroundColor(ContextCompat.getColor(context, R.color.lightGreen));
+                } else {
+                    infoTV.setBackgroundColor(ContextCompat.getColor(context, R.color.colorTrMinus));
+                    view.setBackgroundColor(ContextCompat.getColor(context, R.color.lightRed));
                 }
-                return false;
+                nameTV.setText("Name : " + transaction.getName());
+                descrTV.setText("Description : " + transaction.getDescription());
+                dateTV.setText("Date : " + transaction.getDate());
+                moneyTV.setText("Sum : " + money.toPlainString());
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setCancelable(true);
+                builder.setView(view);
+                Dialog dialog = builder.create();
+                dialog.setCancelable(true);
+                dialog.setCanceledOnTouchOutside(true);
+                dialog.show();
             }
         });
     }
@@ -98,30 +96,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
         return arrayList.size();
     }
 
-    private void infoCheckDialog(final int position) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        LayoutInflater inflater = ((Activity)context).getLayoutInflater();
-        View view = inflater.inflate(R.layout.info_dialog_layout, null);
-        TextView infoTV = (TextView) view.findViewById(R.id.infoBarTV);
-        TextView nameTV = (TextView) view.findViewById(R.id.nameTV);
-        TextView descrTV = (TextView) view.findViewById(R.id.descrTV);
-        TextView dateTV = (TextView) view.findViewById(R.id.dateTV);
-        TextView moneyTV = (TextView) view.findViewById(R.id.moneyTV);
-        Transaction transaction = arrayList.get(position);
-        BigDecimal money = transaction.getMoney();
-        if(money.compareTo(BigDecimal.ZERO) == 1) {
-            infoTV.setBackgroundColor(ContextCompat.getColor(context, R.color.colorTrPlus));
-        }else {
-            infoTV.setBackgroundColor(ContextCompat.getColor(context, R.color.colorTrMinus));
-        }
-        nameTV.setText(transaction.getName());
-        descrTV.setText(transaction.getDescription());
-        dateTV.setText(transaction.getDate());
-        moneyTV.setText(money.toPlainString());
-        Dialog dialog = builder.create();
-        dialog.show();
-    }
-
     protected void editDialog(final int position) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         final LayoutInflater inflater = ((Activity)context).getLayoutInflater();
@@ -129,9 +103,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
         final TextView nameTV = (TextView) view.findViewById(R.id.editTextName);
         final TextView descriptionTV = (TextView) view.findViewById(R.id.editTextDescription);
         final TextView moneyTV = (TextView) view.findViewById(R.id.editTextPrice);
+        TextView title = (TextView) view.findViewById(R.id.dialogTitle);
         final Transaction oldTransaction = arrayList.get(position);
         nameTV.setText(oldTransaction.getName());
         descriptionTV.setText(oldTransaction.getDescription());
+        if(oldTransaction.getMoney().compareTo(BigDecimal.ZERO) == 1) {
+            title.setBackgroundColor(ContextCompat.getColor(context, R.color.lightGreen));
+        }else {
+            title.setBackgroundColor(ContextCompat.getColor(context, R.color.lightRed));
+        }
         moneyTV.setText(String.valueOf(oldTransaction.getMoney()));
 
         builder.setView(view)

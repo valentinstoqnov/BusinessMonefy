@@ -47,8 +47,8 @@ public class XlsGenerator {
             workbook.write(fileOut);
             fileOut.close();
         } catch (Exception e) {
-          e.printStackTrace();
+            e.printStackTrace();
+            Toast.makeText(context, "Database is exported to CSV", Toast.LENGTH_SHORT).show();
         }
-        Toast.makeText(context, "Database is exported to CSV", Toast.LENGTH_SHORT).show();
     }
 }

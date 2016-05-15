@@ -10,7 +10,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="org.elsys.valiolucho.calculator.CalcActivity"
+    tools:context=".calculator.CalcActivity"
     tools:showIn="@layout/activity_calc">
 
     <LinearLayout
@@ -45,7 +45,7 @@
 
         </LinearLayout>
 
-        <EditText
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/calcDisplay" />
@@ -132,21 +132,22 @@
                 android:text="@string/six"
                 android:id="@+id/buttonSix"/>
 
-            <ImageButton
-                style="?android:attr/borderlessButtonStyle"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_action_backspace"
-                android:id="@+id/buttonBackspace" />
+            <!--< <ImageButton
+                 style="?android:attr/borderlessButtonStyle"
+                 android:layout_width="0dp"
+                 android:layout_weight="1"
+                 android:layout_height="wrap_content"
+                 android:src="@drawable/ic_action_backspace"
+                 android:background="@null"
+                 android:id="@+id/buttonBackspace" />
+                 -->
 
-            <!--<Button
+            <Button
                 style="?android:attr/borderlessButtonStyle"
                 android:id="@+id/buttonBackspace"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/backspace"
-                />-->
+                android:text="@string/backspace" />
 
         </LinearLayout>
 

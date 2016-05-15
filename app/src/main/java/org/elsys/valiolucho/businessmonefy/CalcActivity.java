@@ -1,6 +1,5 @@
-package org.elsys.valiolucho.calculator;
+package org.elsys.valiolucho.businessmonefy;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -11,18 +10,13 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import org.elsys.valiolucho.businessmonefy.DataBaseHelper;
-import org.elsys.valiolucho.businessmonefy.HomeActivity;
-import org.elsys.valiolucho.businessmonefy.OnSwipeTouchListener;
-import org.elsys.valiolucho.businessmonefy.R;
-import org.elsys.valiolucho.businessmonefy.Transaction;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CalcActivity extends AppCompatActivity {
-    EditText calcDisplay;
+    TextView calcDisplay;
     TextView viewDisplay;
     private ButtonClickListener buttonClick = new ButtonClickListener();
     protected BigDecimal numBuff = BigDecimal.ZERO.setScale(2, BigDecimal.ROUND_HALF_EVEN);;
@@ -41,7 +35,7 @@ public class CalcActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calc);
         relativeLayout = (RelativeLayout) findViewById(R.id.mainCalcRLayout);
-        calcDisplay = (EditText) findViewById(R.id.calcDisplay);
+        calcDisplay = (TextView) findViewById(R.id.calcDisplay);
         viewDisplay = (TextView) findViewById(R.id.textView);
         nameET = (EditText) findViewById(R.id.nameEditText);
         descriptionET = (EditText) findViewById(R.id.descriptionEditText);

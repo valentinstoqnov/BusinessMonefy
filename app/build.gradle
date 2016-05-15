@@ -23,7 +23,7 @@ android {
     }
     sourceSets {
         main {
-            java.srcDirs = ['src/main/java', 'src/main/java/org/elsys/valiolucho/businessmonefy/Dialogs']
+            java.srcDirs = ['src/main/java']//, 'src/main/java/org/elsys/valiolucho/businessmonefy/Dialogs']
         }
     }
 }
@@ -40,10 +40,7 @@ dependencies {
     compile 'com.android.support:design:23.4.0'
     compile 'com.android.support:support-v4:23.4.0'
     compile 'joda-time:joda-time:2.9.3'
-    compile 'com.github.ashishbhandari:AndroidTabbedDialog:1.0'
     compile 'com.android.support:recyclerview-v7:23.4.0'
     compile 'org.apache.poi:poi:3.14'
-    compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.google.android.gms:play-services-drive:8.4.0'
     compile 'net.rdrei.android.dirchooser:library:3.2@aar'
 }
