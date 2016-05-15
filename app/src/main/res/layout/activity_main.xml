@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:openDrawer="start">
+
+    <include
+        layout="@layout/app_bar_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/nav_header_main"
+        app:menu="@menu/activity_main_drawer" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="80dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageButtonPlus"
+                android:src="@drawable/plus"
+                android:layout_marginBottom="10sp"
+                android:background="@null" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/zero"
+                android:id="@+id/incomeTV"
+                android:textSize="50sp"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_gravity="center_vertical"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageButtonMinus"
+                android:src="@drawable/minus"
+                android:layout_marginBottom="10sp"
+                android:background="@null" />
+
+            <TextView
+                android:id="@+id/outcomeTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/zero"
+                android:textSize="50sp"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_gravity="center_vertical" />
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@android:color/darker_gray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/total"
+                android:textStyle="bold"
+                android:textSize="30sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/zero"
+                android:id="@+id/totalTV"
+                android:textStyle="bold"
+                android:textSize="30sp"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_gravity="center_vertical"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/showGraphics"
+        android:id="@+id/buttonShowGraphics"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="19sp"
+        android:background="@android:color/holo_blue_light"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/showLogs"
+        android:id="@+id/buttonShowLogs"
+        android:layout_toEndOf="@+id/buttonShowGraphics"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_alignParentBottom="true"
+        android:textSize="19sp"
+        android:background="@android:color/holo_purple"/>
+
+
+</android.support.v4.widget.DrawerLayout>

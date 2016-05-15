@@ -129,17 +129,24 @@
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:text="@string/six"
                 android:id="@+id/buttonSix"/>
 
-            <Button
+            <ImageButton
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_action_backspace"
+                android:id="@+id/buttonBackspace" />
+
+            <!--<Button
                 style="?android:attr/borderlessButtonStyle"
                 android:id="@+id/buttonBackspace"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/backspace"
-                />
+                />-->
 
         </LinearLayout>
 
