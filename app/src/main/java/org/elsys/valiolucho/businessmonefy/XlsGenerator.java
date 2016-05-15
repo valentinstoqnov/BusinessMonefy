@@ -40,6 +40,7 @@ public class XlsGenerator {
                 row.createCell(1).setCellValue(transaction.getDescription());
                 row.createCell(2).setCellValue(transaction.getDate());
                 row.createCell(3).setCellValue(transaction.getMoney().toPlainString());
+                index++;
             }
 
             FileOutputStream fileOut = new FileOutputStream(dir + fileName + ".xls");
