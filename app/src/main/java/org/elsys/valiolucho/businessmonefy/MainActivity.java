@@ -20,6 +20,8 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import net.rdrei.android.dirchooser.DirectoryChooserConfig;
 import net.rdrei.android.dirchooser.DirectoryChooserFragment;
 import java.math.BigDecimal;
@@ -223,12 +225,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             dir = getDir();
             CsvGenerator csvGenerator = new CsvGenerator("BusinessMonefyDB.csv", dir, getDatabase(), this);
             csvGenerator.generate();
+            Toast.makeText(this, "Csv file is saved!", Toast.LENGTH_LONG);
         } else if (id == R.id.nav_saveXLS) {
             dir = getDir();
             XlsGenerator xlsGenerator = new XlsGenerator("BusinessMonefyDB.xls", dir, getDatabase(), this);
             xlsGenerator.generate();
+            Toast.makeText(this, "Xls file is saved!", Toast.LENGTH_LONG);
         } else if (id == R.id.nav_exit) {
-            Log.d("exit = = ", "adsad");
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Exit ...");
             builder.setMessage("Are you sure ?");
