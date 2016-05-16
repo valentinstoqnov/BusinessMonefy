@@ -20,28 +20,44 @@ public class ChartsSwipeAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         Fragment fr;
+        Bundle bundle;
         switch (position) {
             case 0:
                 fr = new LineChartFragment();
+                bundle = new Bundle();
+                bundle.putFloatArray("values", dataProcess.getValues());
+                bundle.putStringArray("labels", dataProcess.getLabels());
+                bundle.putString("period", dataProcess.getPeriod());
+                fr.setArguments(bundle);
                 break;
             case 1:
                 fr = new PieChartFragment();
+                bundle = new Bundle();
+                bundle.putFloatArray("values", dataProcess.getValues());
+                bundle.putStringArray("labels", dataProcess.getLabels());
+                bundle.putString("period", dataProcess.getPeriod());
+                fr.setArguments(bundle);
+                /*bundle = new Bundle();
+                bundle.putFloat("incomings", dataProcess.getIncomings().floatValue());
+                bundle.putFloatArray("values", dataProcess.getMinusVals());
+                bundle.putStringArray("labels", dataProcess.getLabels());
+                bundle.putString("period", dataProcess.getPeriod());
+                fr.setArguments(bundle);*/
                 break;
             default:
-                fr = new BarChartFragment();
+                fr = new LineChartFragment();
+                bundle = new Bundle();
+                bundle.putFloatArray("values", dataProcess.getValues());
+                bundle.putStringArray("labels", dataProcess.getLabels());
+                bundle.putString("period", dataProcess.getPeriod());
+                fr.setArguments(bundle);
                 break;
         }
-
-        Bundle bundle = new Bundle();
-        bundle.putFloatArray("values", dataProcess.getValues());
-        bundle.putStringArray("labels", dataProcess.getLabels());
-        bundle.putString("period", dataProcess.getPeriod());
-        fr.setArguments(bundle);
         return fr;
     }
 
     @Override
     public int getCount() {
-        return 3;
+        return 2;
     }
 }

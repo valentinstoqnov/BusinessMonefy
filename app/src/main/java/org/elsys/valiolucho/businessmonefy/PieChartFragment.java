@@ -49,13 +49,13 @@ public class PieChartFragment extends Fragment {
             entries.add(new Entry(value, index));
             index++;
         }
-        PieDataSet dataSet = new PieDataSet(entries, period);
-        PieData data = new PieData(labels, dataSet);
+        PieDataSet dataSet = new PieDataSet(entries, "");
         dataSet.setColors(ColorTemplate.JOYFUL_COLORS);
-
+        PieData data = new PieData(labels, dataSet);
         View view = inflater.inflate(R.layout.fragment_pie_chart, container, false);
         pieChart = (PieChart)view.findViewById(R.id.pieChart);
         pieChart.setData(data);
+        pieChart.setDescription(period);
         pieChart.animateXY(2000, 2000);
         return view;
     }

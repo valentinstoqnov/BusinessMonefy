@@ -45,6 +45,24 @@ public class DataProcess {
         return outcomingSum.setScale(2, BigDecimal.ROUND_HALF_EVEN).stripTrailingZeros();
     }
 
+    public float[] getMinusVals() {
+        ArrayList<BigDecimal> nums = new ArrayList<>();
+        int index = 0;
+        for (Transaction transaction : data) {
+            transaction = data.get(index);
+            if(transaction.getMoney().compareTo(BigDecimal.ZERO) == -1) {
+                nums.add(transaction.getMoney());
+                labels[index] = transaction.getName();
+            }
+            index++;
+        }
+        float[] floatNums = new float[nums.size()];
+        for (int i = 0; i < nums.size(); i++) {
+            floatNums[i] = nums.get(i).floatValue();
+        }
+        return floatNums;
+    }
+
     private void setValues() {
         this.values = new float[data.size()];
         for (int i = 0; i < data.size(); i++) {
@@ -57,7 +75,7 @@ public class DataProcess {
         this.labels = new String[data.size()];
         if("today".equals(period) || "yesterday".equals(period)) {
             labelTimeGetter();
-        }else if("week".equals(period)) {
+        }else if("week".equals(period) || "month".equals(period)) {
             //days
             for(int i = 0; i < data.size(); i++) {
                 Transaction transaction = data.get(i);
@@ -65,12 +83,19 @@ public class DataProcess {
                 int spaceIndex = date.lastIndexOf(' ');
                 labels[i] = date.substring(spaceIndex - 2, spaceIndex);
             }
-        }else if("month".equals(period)) {
-            //weeks
         }else if("year".equals(period)) {
             //months
+            for(int i = 0; i < data.size(); i++) {
+                Transaction transaction = data.get(i);
+                String date = transaction.getDate();
+                labels[i] = MyDate.getTextMonth(date);
+            }
         }else {
             //date 2016-02-10
+            for(int i = 0; i < data.size(); i++) {
+                Transaction transaction = data.get(i);
+                labels[i] = transaction.getDate();
+            }
         }
     }
 
@@ -78,13 +103,6 @@ public class DataProcess {
         for (int i = 0; i < data.size(); i++) {
             Transaction transaction = data.get(i);
             labels[i] = transaction.getDate().substring(transaction.getDate().lastIndexOf(' '));
-        }
-    }
-
-    private void labelDateGetter() {
-        for (int i = 0; i < data.size(); i++) {
-            Transaction transaction = data.get(i);
-            labels[i] = transaction.getDate().substring(0, transaction.getDate().lastIndexOf(' '));
         }
     }
 

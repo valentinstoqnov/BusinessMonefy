@@ -37,7 +37,11 @@
         <activity
             android:name=".CalcActivity"
             android:label="@string/title_activity_calc"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="org.elsys.valiolucho.businessmonefy.CalcActivity"/>
+        </activity>
     </application>
 
 </manifest>

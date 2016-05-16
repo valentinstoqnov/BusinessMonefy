@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -43,9 +44,28 @@ public class LogsActivity extends AppCompatActivity {
     private String fromDate;
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        myDbHelper.close();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        myDbHelper = DataBaseHelper.getInstance(getApplicationContext());
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        myDbHelper.close();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_logs);
+        myDbHelper = DataBaseHelper.getInstance(getApplicationContext());
         recyclerView = (RecyclerView) findViewById(R.id.logsRecyclerView);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -81,7 +101,6 @@ public class LogsActivity extends AppCompatActivity {
         spinner.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                Log.d("sadasd", "dasda");
                 orderDialog();
                 if(arrayList != null) {
                     Collections.reverse(arrayList);
@@ -99,43 +118,55 @@ public class LogsActivity extends AppCompatActivity {
                 String itemText = parent.getItemAtPosition(position).toString();
                 MyDate myDate = new MyDate();
                 toDate = myDate.getCurrentDateTime();
-                myDbHelper = DataBaseHelper.getInstance(getApplicationContext());
                 if(itemText.equals(periodNames[0])) {
                     fromDate = myDate.getPreviousDateTime(toDate, "today");
                     toDate = myDate.getCurrentDateTime();
                     arrayList = myDbHelper.getSpecificData(order, fromDate, toDate);
+                    recyclerAdapter = new RecyclerAdapter(arrayList, LogsActivity.this);
+                    recyclerView.setAdapter(recyclerAdapter);
+                    swipeToDismiss();
                 }else if(itemText.equals(periodNames[1])){
                     fromDate = myDate.getPreviousDateTime(toDate, "yesterday");
                     toDate = fromDate;
                     toDate = myDate.getPreviousDateTime(toDate, "endDay");
                     arrayList = myDbHelper.getSpecificData(order, fromDate, toDate);
+                    recyclerAdapter = new RecyclerAdapter(arrayList, LogsActivity.this);
+                    recyclerView.setAdapter(recyclerAdapter);
+                    swipeToDismiss();
                 }else if(itemText.equals(periodNames[2])) {
                     fromDate = myDate.getPreviousDateTime(toDate, "week");
                     toDate = myDate.getCurrentDateTime();
                     arrayList = myDbHelper.getSpecificData(order, fromDate, toDate);
+                    recyclerAdapter = new RecyclerAdapter(arrayList, LogsActivity.this);
+                    recyclerView.setAdapter(recyclerAdapter);
+                    swipeToDismiss();
                 }else if(itemText.equals(periodNames[3])) {
                     fromDate = myDate.getPreviousDateTime(toDate, "month");
                     toDate = myDate.getCurrentDateTime();
                     arrayList = myDbHelper.getSpecificData(order, fromDate, toDate);
+                    recyclerAdapter = new RecyclerAdapter(arrayList, LogsActivity.this);
+                    recyclerView.setAdapter(recyclerAdapter);
+                    swipeToDismiss();
                 }else if(itemText.equals(periodNames[4])) {
                     fromDate = myDate.getPreviousDateTime(toDate, "year");
                     toDate = myDate.getCurrentDateTime();
                     arrayList = myDbHelper.getSpecificData(order, fromDate, toDate);
+                    recyclerAdapter = new RecyclerAdapter(arrayList, LogsActivity.this);
+                    recyclerView.setAdapter(recyclerAdapter);
+                    swipeToDismiss();
                 }else if(itemText.equals(periodNames[5])) {
                     arrayList = myDbHelper.getAllData(order);
+                    recyclerAdapter = new RecyclerAdapter(arrayList, LogsActivity.this);
+                    recyclerView.setAdapter(recyclerAdapter);
+                    swipeToDismiss();
                 }else {
                     datepickerManager();
                 }
-                myDbHelper.close();
-                recyclerAdapter = new RecyclerAdapter(arrayList, LogsActivity.this);
-                recyclerView.setAdapter(recyclerAdapter);
-                swipeToDismiss();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                arrayList = myDbHelper.getAllData(order);
-                myDbHelper.close();
+                spinner.setSelection(spinnerAdapter.getPosition("Today"));
             }
         });
         spinner.setAdapter(spinnerAdapter);
@@ -201,12 +232,16 @@ public class LogsActivity extends AppCompatActivity {
                 fromDate = fromDateTV.getText().toString();
                 toDate = toDateTV.getText().toString();
                 arrayList = myDbHelper.getSpecificData(order, fromDate, toDate);
-                recyclerAdapter.notifyDataSetChanged();
+                recyclerAdapter = new RecyclerAdapter(arrayList, LogsActivity.this);
+                recyclerView.setAdapter(recyclerAdapter);
+                swipeToDismiss();
+                dialog.dismiss();
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                spinner.setSelection(spinnerAdapter.getPosition("Today"));
                 dialog.dismiss();
             }
         });
@@ -228,7 +263,7 @@ public class LogsActivity extends AppCompatActivity {
 
             Bundle bundle = getArguments();
             which = bundle.getBoolean("which");
-            return new android.app.DatePickerDialog(getActivity(), this, year, month, day);
+            return new android.app.DatePickerDialog(getActivity(), this, year, month - 1, day);
         }
 
         @Override
@@ -237,12 +272,12 @@ public class LogsActivity extends AppCompatActivity {
             String month = String.valueOf(monthOfYear + 1);
             String day = String.valueOf(dayOfMonth);
 
-            if(monthOfYear < 10) {
+            if(month.length() == 1) {
                 month = "0" + month;
             }
 
-            if(dayOfMonth < 10) {
-                date = "0" + day;
+            if(day.length() == 1) {
+                day = "0" + day;
             }
 
             if(which) {
