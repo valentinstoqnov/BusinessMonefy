@@ -1,6 +1,7 @@
 package org.elsys.valiolucho.businessmonefy;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import java.util.ArrayList;
@@ -16,12 +18,60 @@ import java.util.ArrayList;
 public class BarChartFragment extends Fragment {
 
     BarChart barChart;
+    private float[] values;
+    private String[] labels;
+    private String period;
 
+    public BarChartFragment() {}
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle bundle = getArguments();
+        values = bundle.getFloatArray("values");
+        labels = bundle.getStringArray("labels");
+        period = bundle.getString("period");
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        /*
+        ArrayList<Entry> entries = new ArrayList<>();
+        int index = 0;
+        for (float value : values) {
+            entries.add(new Entry(value, index));
+            index++;
+        }
+        LineDataSet dataset = new LineDataSet(entries, period);
+
+        LineData data = new LineData(labels, dataset);
+        dataset.setColors(ColorTemplate.COLORFUL_COLORS);
+        dataset.setDrawCubic(true);
+        dataset.setDrawFilled(true);
+
+        View view = inflater.inflate(R.layout.fragment_line_chart, container, false);
+        lineChart = (LineChart)view.findViewById(R.id.lineChart);
+        lineChart.setData(data);
+        lineChart.animateY(2000);
+        lineChart.setAutoScaleMinMaxEnabled(true);
+        lineChart.setScaleEnabled(false);
+        lineChart.setPinchZoom(false);
+        lineChart.setDoubleTapToZoomEnabled(false);
+         */
+        ArrayList<BarEntry> entries = new ArrayList<>();
+        int index = 0;
+        for (float value : values) {
+            entries.add(new BarEntry(value, index));
+            index++;
+        }
+
+        //BarDataSet dataSet = new BarDataSet(entries, labels);
+
+       // BarData data = new BarData(labels, dataset);
+       // barChart.setData(data);
+
         View view = inflater.inflate(R.layout.fragment_bar_chart,container,false);
         Bundle bundle = getArguments();
         String message = Integer.toString(bundle.getInt("Chart"));

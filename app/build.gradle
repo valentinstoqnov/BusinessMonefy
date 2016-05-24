@@ -23,7 +23,8 @@ android {
     }
     sourceSets {
         main {
-            java.srcDirs = ['src/main/java']//, 'src/main/java/org/elsys/valiolucho/businessmonefy/Dialogs']
+            java.srcDirs = ['src/main/java']
+//, 'src/main/java/org/elsys/valiolucho/businessmonefy/Dialogs']
         }
     }
 }

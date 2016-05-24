@@ -1,7 +1,10 @@
 package org.elsys.valiolucho.businessmonefy;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
+
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -9,20 +12,18 @@ import java.util.ArrayList;
 public class CsvGenerator {
 
     private String fileName;
-    private String dir;
     private ArrayList<Transaction> data;
     private Context context;
 
-    public CsvGenerator(String fileName, String dir, ArrayList<Transaction> data, Context context) {
+    public CsvGenerator(String fileName, ArrayList<Transaction> data, Context context) {
         this.fileName = fileName;
-        this.dir = dir;
         this.data = data;
         this.context = context;
     }
 
     public void generate() {
         try {
-            StringBuffer buff = new StringBuffer();
+            StringBuilder buff = new StringBuilder();
             buff.append("Name, Description, Date, Money\n");
             for (Transaction transaction : data) {
                 buff.append(transaction.getName());
@@ -35,7 +36,11 @@ public class CsvGenerator {
                 buff.append('\n');
             }
             buff.deleteCharAt(buff.lastIndexOf("\n"));
-            FileWriter writer = new FileWriter(dir + fileName + ".csv");
+            File bmDir = new File("/storage/emulated/0/BusinessMonefy/");
+            bmDir.mkdirs();
+            File file = new File(bmDir, "businessMonefy.csv");
+            file.createNewFile();
+            FileWriter writer = new FileWriter(file);
             writer.append(buff.toString());
             writer.flush();
             writer.close();

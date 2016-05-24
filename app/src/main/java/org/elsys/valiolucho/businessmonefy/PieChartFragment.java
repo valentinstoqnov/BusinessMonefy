@@ -50,7 +50,7 @@ public class PieChartFragment extends Fragment {
             index++;
         }
         PieDataSet dataSet = new PieDataSet(entries, "");
-        dataSet.setColors(ColorTemplate.JOYFUL_COLORS);
+        dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
         PieData data = new PieData(labels, dataSet);
         View view = inflater.inflate(R.layout.fragment_pie_chart, container, false);
         pieChart = (PieChart)view.findViewById(R.id.pieChart);

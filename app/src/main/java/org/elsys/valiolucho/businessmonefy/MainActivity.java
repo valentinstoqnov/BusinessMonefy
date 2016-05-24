@@ -1,12 +1,15 @@
 package org.elsys.valiolucho.businessmonefy;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
@@ -21,14 +24,12 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import net.rdrei.android.dirchooser.DirectoryChooserConfig;
 import net.rdrei.android.dirchooser.DirectoryChooserFragment;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
-        DirectoryChooserFragment.OnFragmentInteractionListener{
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     private Button showGraphicsButton;
     private Button showLogsButton;
@@ -172,30 +173,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return data;
     }
 
-    private String dir;
-    private DirectoryChooserFragment mDialog;
-
-    private String getDir() {
-        dir = getApplicationContext().getFilesDir().getAbsolutePath();
-        DirectoryChooserConfig config = DirectoryChooserConfig.builder()
-                .newDirectoryName("BusinessMonefy")
-                .build();
-        mDialog = DirectoryChooserFragment.newInstance(config);
-        mDialog.show(getFragmentManager(), null);
-        return dir;
-    }
-
-    @Override
-    public void onSelectDirectory(@NonNull String path) {
-        dir = path;
-        mDialog.dismiss();
-    }
-
-    @Override
-    public void onCancelChooser() {
-        mDialog.dismiss();
-    }
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -218,19 +195,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     DataBaseHelper myDbHelper = DataBaseHelper.getInstance(getApplicationContext());
                     myDbHelper.deleteTable();
                     myDbHelper.close();
+                    textViewsManager();
+                    Toast.makeText(getApplicationContext(), "Database deleted", Toast.LENGTH_SHORT).show();
                 }
             });
             builder.create().show();
         } else if (id == R.id.nav_saveCSV) {
-            dir = getDir();
-            CsvGenerator csvGenerator = new CsvGenerator("BusinessMonefyDB.csv", dir, getDatabase(), this);
+            CsvGenerator csvGenerator = new CsvGenerator("BusinessMonefyDB.csv", getDatabase(), this);
             csvGenerator.generate();
-            Toast.makeText(this, "Csv file is saved!", Toast.LENGTH_LONG);
         } else if (id == R.id.nav_saveXLS) {
-            dir = getDir();
-            XlsGenerator xlsGenerator = new XlsGenerator("BusinessMonefyDB.xls", dir, getDatabase(), this);
+            XlsGenerator xlsGenerator = new XlsGenerator("BusinessMonefyDB.xls", getDatabase(), this);
             xlsGenerator.generate();
-            Toast.makeText(this, "Xls file is saved!", Toast.LENGTH_LONG);
         } else if (id == R.id.nav_exit) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Exit ...");
