@@ -1,15 +1,12 @@
 package org.elsys.valiolucho.businessmonefy;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
@@ -24,8 +21,13 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-import net.rdrei.android.dirchooser.DirectoryChooserConfig;
-import net.rdrei.android.dirchooser.DirectoryChooserFragment;
+
+import com.dropbox.client2.DropboxAPI;
+import com.dropbox.client2.android.AndroidAuthSession;
+import com.dropbox.client2.exception.DropboxException;
+import com.dropbox.client2.session.AccessTokenPair;
+import com.dropbox.client2.session.AppKeyPair;
+import com.dropbox.client2.session.Session;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
@@ -41,10 +43,45 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TextView outcomeTV;
     private TextView totalTV;
 
+    private DropboxAPI<AndroidAuthSession> mDBApi;
+    private final static String APP_KEY = "fha6o9qlsifojb3";
+    private final static String APP_SECRET = "jhbwpo37ojnrxgr";
+    private final static String DB_PREFS = "DropboxPreferences";
+    private final static String TOKEN_NAME = "SharedPrefsTokenForDropbox";
+
     @Override
     protected void onResume() {
         super.onResume();
+        if (mDBApi.getSession().authenticationSuccessful()) {
+            try {
+                mDBApi.getSession().finishAuthentication();
+                String accessToken = mDBApi.getSession().getOAuth2AccessToken();
+                storeDBToken(accessToken);
+            } catch (IllegalStateException e) {
+                Toast.makeText(getApplicationContext(), "Error during the authorization", Toast.LENGTH_SHORT).show();
+            }
+        }
         textViewsManager();
+    }
+
+    private void dropboxSession(){
+        AppKeyPair appKeys = new AppKeyPair(APP_KEY, APP_SECRET);
+        AndroidAuthSession session = new AndroidAuthSession(appKeys);
+        mDBApi = new DropboxAPI<AndroidAuthSession>(session);
+        SharedPreferences prefs = getSharedPreferences(DB_PREFS, Context.MODE_PRIVATE);
+        String token = prefs.getString(TOKEN_NAME, null);
+        if(token != null) {
+            session.setOAuth2AccessToken(token);
+        } else {
+            mDBApi.getSession().startOAuth2Authentication(MainActivity.this);
+        }
+    }
+
+    private void storeDBToken(String token) {
+        SharedPreferences prefs = getSharedPreferences(DB_PREFS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(TOKEN_NAME, token);
+        editor.apply();
     }
 
     @Override
@@ -69,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         textViewsManager();
         onClickButtonListeners();
         onClickImageButtonsListeners();
+        dropboxSession();
     }
 
     private void textViewsManager() {
@@ -203,9 +241,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_saveCSV) {
             CsvGenerator csvGenerator = new CsvGenerator("BusinessMonefyDB.csv", getDatabase(), this);
             csvGenerator.generate();
+            Toast.makeText(getApplicationContext(), "Database is exported to CSV", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_saveXLS) {
-            XlsGenerator xlsGenerator = new XlsGenerator("BusinessMonefyDB.xls", getDatabase(), this);
+            XlsGenerator xlsGenerator = new XlsGenerator(getDatabase(), "businessMonefy.xls");
             xlsGenerator.generate();
+            Toast.makeText(getApplicationContext(), "Database is exported to Excel file", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_exit) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Exit ...");
@@ -216,7 +256,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     dialog.cancel();
                 }
             });
-            builder.setPositiveButton("Ëxit", new DialogInterface.OnClickListener() {
+            builder.setPositiveButton("Exit", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     finish();
@@ -224,6 +264,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             });
             builder.create().show();
+        }else if(id == R.id.nav_upload_db) {
+            XlsGenerator xlsGenerator = new XlsGenerator(getDatabase(), "businessMonefyDb.xls");
+            xlsGenerator.generate();
+            new DropboxUpload(getApplicationContext(), mDBApi, "/storage/emulated/0/BusinessMonefy/businessMonefyDb.xls").execute();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

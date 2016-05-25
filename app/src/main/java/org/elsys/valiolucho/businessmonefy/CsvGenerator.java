@@ -44,7 +44,6 @@ public class CsvGenerator {
             writer.append(buff.toString());
             writer.flush();
             writer.close();
-            Toast.makeText(context, "Database is exported to CSV", Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
             e.printStackTrace();
         }

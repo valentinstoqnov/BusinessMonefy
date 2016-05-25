@@ -1,8 +1,5 @@
 package org.elsys.valiolucho.businessmonefy;
 
-import android.content.Context;
-import android.util.Log;
-import android.widget.Toast;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -16,14 +13,12 @@ import java.util.ArrayList;
 
 public class XlsGenerator {
 
-    private String fileName;
     private ArrayList<Transaction> data;
-    private Context context;
+    private String filename;
 
-    public XlsGenerator(String fileName, ArrayList<Transaction> data, Context context) {
-        this.fileName = fileName;
+    public XlsGenerator(ArrayList<Transaction> data, String filename) {
         this.data = data;
-        this.context = context;
+        this.filename = filename;
     }
 
     private void boldRow(HSSFWorkbook wb, Row row) {
@@ -61,11 +56,10 @@ public class XlsGenerator {
 
             File bmDir = new File("/storage/emulated/0/BusinessMonefy/");
             bmDir.mkdirs();
-            File file = new File(bmDir, "businessMonefy.xls");
+            File file = new File(bmDir, filename);
             FileOutputStream fileOut = new FileOutputStream(file);
             workbook.write(fileOut);
             fileOut.close();
-            Toast.makeText(context, "Database is exported to Excel file", Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             e.printStackTrace();
         }
