@@ -31,15 +31,10 @@ public class LogsActivity extends AppCompatActivity {
     private RecyclerView.Adapter recyclerAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<Transaction> arrayList = new ArrayList<>();
-
     private Spinner spinner;
     private ArrayAdapter<CharSequence> spinnerAdapter;
-
     private DataBaseHelper myDbHelper;
     private String order = "DESC";
-
-    private DateHolder dateHolder;
-
     private String toDate;
     private String fromDate;
 

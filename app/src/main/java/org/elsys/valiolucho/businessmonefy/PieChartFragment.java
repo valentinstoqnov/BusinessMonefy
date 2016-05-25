@@ -17,8 +17,6 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
-import org.elsys.valiolucho.drawer.MyPieChart;
-
 import java.util.ArrayList;
 
 

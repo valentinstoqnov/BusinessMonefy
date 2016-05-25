@@ -97,8 +97,7 @@ public class CalcActivity extends AppCompatActivity {
                             transaction.setDate();
                             myDb = DataBaseHelper.getInstance(getApplicationContext());
                             myDb.insertData(transaction);
-                            myDb.close();
-                            Toast.makeText(CalcActivity.this, "Saved!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Saved!", Toast.LENGTH_SHORT).show();
                             finish();
                         }
                     }

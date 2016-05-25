@@ -73,28 +73,12 @@ public class DataProcess {
 
     private void setLabels() {
         this.labels = new String[data.size()];
+
         if("today".equals(period) || "yesterday".equals(period)) {
             labelTimeGetter();
-        }else if("week".equals(period) || "month".equals(period)) {
-            //days
-            for(int i = 0; i < data.size(); i++) {
-                Transaction transaction = data.get(i);
-                String date = transaction.getDate();
-                int spaceIndex = date.lastIndexOf(' ');
-                labels[i] = date.substring(spaceIndex - 2, spaceIndex);
-            }
-        }else if("year".equals(period)) {
-            //months
-            for(int i = 0; i < data.size(); i++) {
-                Transaction transaction = data.get(i);
-                String date = transaction.getDate();
-                labels[i] = MyDate.getTextMonth(date);
-            }
         }else {
-            //date 2016-02-10
             for(int i = 0; i < data.size(); i++) {
-                Transaction transaction = data.get(i);
-                labels[i] = transaction.getDate();
+                labels[i] = data.get(i).getDate();
             }
         }
     }

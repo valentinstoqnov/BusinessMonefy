@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         plusImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent plusActivityIntent = new Intent(MainActivity.this, CalcActivity.class);
+                Intent plusActivityIntent = new Intent(MainActivity.this, TransactionActivity.class);
                 vibe.vibrate(30);
                 startActivity(plusActivityIntent);
             }
@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         minusImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent minusActivityIntent = new Intent(MainActivity.this, CalcActivity.class);
+                Intent minusActivityIntent = new Intent(MainActivity.this, TransactionActivity.class);
                 minusActivityIntent.putExtra("minus", true);
                 vibe.vibrate(30);
                 startActivity(minusActivityIntent);

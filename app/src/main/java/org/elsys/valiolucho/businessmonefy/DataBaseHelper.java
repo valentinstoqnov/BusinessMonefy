@@ -68,7 +68,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         contentValues.put(DESCRIPTION, transaction.getDescription());
         contentValues.put(DATE, transaction.getDate());
         contentValues.put(MONEY, Transaction.getMoneyAsInt(transaction.getMoney()).intValue());
-
         db.insert(TABLE_NAME, null, contentValues);
         db.close();
     }

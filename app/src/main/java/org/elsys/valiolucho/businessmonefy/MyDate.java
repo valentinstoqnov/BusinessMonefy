@@ -1,7 +1,5 @@
 package org.elsys.valiolucho.businessmonefy;
 
-import android.util.Log;
-
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -35,16 +33,5 @@ public class MyDate {
             dateTime = dateTime.withHourOfDay(23).withMinuteOfHour(59).withSecondOfMinute(59);
         }
         return formatter.print(dateTime);
-    }
-
-    public String getLegibleDate(String date) {
-        DateTimeFormatter formatter = DateTimeFormat.forPattern(DATE_TIME_LEGIBLE_FORMAT);
-        DateTime dateTime = formatter.parseDateTime(date);
-        return dateTime.toString();
-    }
-
-    public static String getTextMonth(String date) {
-        DateTime dateTime = new DateTime(date);
-        return dateTime.monthOfYear().getAsText();
     }
 }
