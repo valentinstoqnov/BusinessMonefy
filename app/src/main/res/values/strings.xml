@@ -70,4 +70,13 @@
 
     <string name="action_settings">Settings</string>
     <string name="title_activity_transaction">TransactionActivity</string>
+    <string name="defaultCurrency">USD</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+
+    <string-array name="currencyNames">
+        <item>USD</item>
+        <item>BGN</item>
+        <item>EUR</item>
+        <item>GBP</item>
+    </string-array>
 </resources>

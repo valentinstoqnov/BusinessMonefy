@@ -1,6 +1,8 @@
 package org.elsys.valiolucho.businessmonefy;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
@@ -11,9 +13,10 @@ import java.io.FileInputStream;
 
 public class DropboxUpload extends AsyncTask<String, Void, String> {
 
-    Context context;
-    DropboxAPI<AndroidAuthSession> mDBApi;
-    String path;
+    private Context context;
+    private DropboxAPI<AndroidAuthSession> mDBApi;
+    private String path;
+    private boolean isConnected = false;
 
     public DropboxUpload(Context context, DropboxAPI<AndroidAuthSession> mDBApi, String path) {
         this.context = context;
@@ -24,12 +27,16 @@ public class DropboxUpload extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... params) {
         DropboxAPI.Entry response = null;
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
         try {
             File file = new File(path);
             FileInputStream inputStream = new FileInputStream(file);
-            response = mDBApi.putFile(path.substring(path.lastIndexOf('/') - 1), inputStream,
-                    file.length(), null, null);
-            Log.e("DropboxUpload", "The uploaded file's rev is: " + response.rev);
+            if (isConnected) {
+                response = mDBApi.putFile(path.substring(path.lastIndexOf('/') - 1), inputStream,
+                        file.length(), null, null);
+            }
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -45,8 +52,14 @@ public class DropboxUpload extends AsyncTask<String, Void, String> {
         if(!result.isEmpty()){
             Toast.makeText(context, "File Successfully Uploaded!", Toast.LENGTH_SHORT).show();
             Log.e("DbLog", "The uploaded file's rev is: " + result);
-            File file = new File(path);
-            file.delete();
+        }else {
+            if (!isConnected) {
+                Toast.makeText(context, "No connection", Toast.LENGTH_SHORT).show();
+            }else {
+                Toast.makeText(context, "Error occured", Toast.LENGTH_SHORT).show();
+            }
         }
+        File file = new File(path);
+        if(file.exists()) file.delete();
     }
 }

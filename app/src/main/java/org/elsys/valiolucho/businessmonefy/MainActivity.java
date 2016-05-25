@@ -21,7 +21,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
 import com.dropbox.client2.exception.DropboxException;
@@ -268,6 +267,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             XlsGenerator xlsGenerator = new XlsGenerator(getDatabase(), "businessMonefyDb.xls");
             xlsGenerator.generate();
             new DropboxUpload(getApplicationContext(), mDBApi, "/storage/emulated/0/BusinessMonefy/businessMonefyDb.xls").execute();
+        }else if(id == R.id.nav_settings) {
+            
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

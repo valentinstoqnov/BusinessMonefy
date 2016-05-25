@@ -1,13 +1,15 @@
 package org.elsys.valiolucho.businessmonefy;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -24,16 +26,8 @@ public class TransactionActivity extends AppCompatActivity {
     private TextView currencyET;
     private boolean isMinus = false;
     private DataBaseHelper myDb;
-    private static final int CALCULATOR_REQUEST = 1;
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CALCULATOR_REQUEST) {
-            if (resultCode == RESULT_OK) {
-                trMoneyET.setText(data.getDataString());
-            }
-        }
-    }
+    public static final String CURRENCY_PREFS = "CurrencyPrefs";
+    public static final String CURRENCY = "Currency";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +54,16 @@ public class TransactionActivity extends AppCompatActivity {
         trDescriptionET = (EditText) findViewById(R.id.trDescriptionET);
         trMoneyET = (EditText) findViewById(R.id.trMoneyET);
         currencyET = (TextView) findViewById(R.id.trCurrencyTV);
+
+        SharedPreferences prefs = getSharedPreferences(CURRENCY_PREFS, Context.MODE_PRIVATE);
+        String currency = prefs.getString(CURRENCY, null);
+        if(currency != null) {
+            currencyET.setText(currency);
+        }else{
+            String defaultCurrency = getString(R.string.defaultCurrency);
+            currencyET.setText(defaultCurrency);
+            storeCurrencyPrefs(defaultCurrency);
+        }
         FloatingActionButton floatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
         if(floatingActionButton != null) {
             floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -73,9 +77,9 @@ public class TransactionActivity extends AppCompatActivity {
                     List activities = packageManager.queryIntentActivities(calculatorIntent , PackageManager.MATCH_DEFAULT_ONLY);
                     boolean isIntentSafe = activities.size() > 0;
                     if (isIntentSafe) {
-                        startActivityForResult(calculatorIntent, CALCULATOR_REQUEST);
+                        startActivity(calculatorIntent);
                     }else {
-                        Toast.makeText(getApplicationContext(), "To perform this action you should hava calculator", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "To perform this action you should have calculator", Toast.LENGTH_LONG).show();
                     }
                 }
             });
@@ -84,13 +88,33 @@ public class TransactionActivity extends AppCompatActivity {
         onSwipeListener();
     }
 
+    private void storeCurrencyPrefs(String currency) {
+        SharedPreferences prefs = getSharedPreferences(CURRENCY_PREFS, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(CURRENCY, currency);
+        editor.apply();
+    }
+
     private void onSwipeListener() {
         relativeLayout.setOnTouchListener(new OnSwipeTouchListener(getApplicationContext()){
             @Override
             public void onSwipeLeft() {
                 String name = trNameET.getText().toString();
+                if (name.isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "Name field is empty", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 String description = trDescriptionET.getText().toString();
-                BigDecimal money = new BigDecimal(trMoneyET.getText().toString());
+                if (description.isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "Description field is empty", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                String moneyStr = trMoneyET.getText().toString();
+                if (moneyStr.isEmpty()) {
+                    Toast.makeText(getApplicationContext(), "Money field is empty", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                BigDecimal money = new BigDecimal(moneyStr);
                 if(money.compareTo(BigDecimal.ZERO) == 0) {
                     Toast.makeText(getApplicationContext(), "Sum can not be 0", Toast.LENGTH_LONG).show();
                     return;
