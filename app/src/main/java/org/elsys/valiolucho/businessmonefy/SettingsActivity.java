@@ -1,5 +1,7 @@
 package org.elsys.valiolucho.businessmonefy;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -30,6 +32,11 @@ public class SettingsActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String currency = spinner.getSelectedItem().toString();
+                SharedPreferences prefs = getSharedPreferences(TransactionActivity.CURRENCY_PREFS, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString(TransactionActivity.CURRENCY, currency);
+                editor.apply();
                 //shared prefs save
                 //db update sums...
             }

@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            exitDialog();
         }
     }
 
@@ -246,33 +246,38 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             xlsGenerator.generate();
             Toast.makeText(getApplicationContext(), "Database is exported to Excel file", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.nav_exit) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Exit ...");
-            builder.setMessage("Are you sure ?");
-            builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
-            builder.setPositiveButton("Exit", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    finish();
-                    System.exit(0);
-                }
-            });
-            builder.create().show();
+            exitDialog();
         }else if(id == R.id.nav_upload_db) {
             XlsGenerator xlsGenerator = new XlsGenerator(getDatabase(), "businessMonefyDb.xls");
             xlsGenerator.generate();
             new DropboxUpload(getApplicationContext(), mDBApi, "/storage/emulated/0/BusinessMonefy/businessMonefyDb.xls").execute();
-        }else if(id == R.id.nav_settings) {
-            
-        }
+        }/*else if(id == R.id.nav_settings) {
+            Intent settingsActivityIntent = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(settingsActivityIntent);
+        }*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void exitDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Exit ...");
+        builder.setMessage("Are you sure ?");
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.setPositiveButton("Exit", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+                System.exit(0);
+            }
+        });
+        builder.create().show();
     }
 }
