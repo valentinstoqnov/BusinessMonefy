@@ -34,7 +34,9 @@ public class TransactionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transaction);
         Bundle extras = getIntent().getExtras();
-        if(extras != null) {
+        if(extras == null) {
+            isMinus = false;
+        }else{
             isMinus = true;
         }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -121,7 +123,7 @@ public class TransactionActivity extends AppCompatActivity {
                 }
                 if (isMinus && money.compareTo(BigDecimal.ZERO) == 1) {
                     money = money.negate();
-                }else if(!isMinus && money.compareTo(BigDecimal.ZERO) == 1) {
+                }else if(!isMinus && money.compareTo(BigDecimal.ZERO) == -1) {
                     money = money.negate();
                 }
                 Transaction transaction = new Transaction(name, description, money);
