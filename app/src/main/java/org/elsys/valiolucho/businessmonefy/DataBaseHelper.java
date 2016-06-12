@@ -23,8 +23,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private static final String MONEY = "money";
 
     private static final String CREATE_INCOME_QUERY = "CREATE TABLE " + TABLE_NAME +
-            "(" + NAME + " VARCHAR(64), " +
-            DESCRIPTION + " TEXT, " + DATE + " DATETIME, " + MONEY + " INTEGER);";
+            "(" + NAME + " TEXT, " +
+            DESCRIPTION + " TEXT, " + DATE + " DATETIME, " + MONEY + " BIGINT);";
 
     private static final String DROP_TABLE_QUERY = "DROP TABLE IF EXISTS " + TABLE_NAME;
 

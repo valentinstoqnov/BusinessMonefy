@@ -90,7 +90,7 @@ public class TransactionActivity extends AppCompatActivity {
         onSwipeListener();
     }
 
-    private void storeCurrencyPrefs(String currency) {
+    public void storeCurrencyPrefs(String currency) {
         SharedPreferences prefs = getSharedPreferences(CURRENCY_PREFS, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(CURRENCY, currency);

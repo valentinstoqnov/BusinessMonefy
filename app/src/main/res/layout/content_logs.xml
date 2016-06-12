@@ -9,6 +9,12 @@
     tools:context="org.elsys.valiolucho.businessmonefy.LogsActivity"
     tools:showIn="@layout/activity_logs">
 
+    <TabWidget
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </TabWidget>
+
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

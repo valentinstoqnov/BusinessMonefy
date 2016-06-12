@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -60,6 +61,23 @@ public class LogsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_logs);
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null) {
+            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+            ActionBar.TabListener tabListener = new ActionBar.TabListener() {
+                public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+
+                }
+
+                public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
+
+                }
+
+                public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
+                    //ignore
+                }
+            };
+        }
         myDbHelper = DataBaseHelper.getInstance(getApplicationContext());
         recyclerView = (RecyclerView) findViewById(R.id.logsRecyclerView);
         layoutManager = new LinearLayoutManager(this);

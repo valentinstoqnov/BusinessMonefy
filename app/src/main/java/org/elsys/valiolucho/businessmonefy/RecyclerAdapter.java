@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -32,6 +33,17 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
         this.context = context;
     }
 
+    private String getCurrency() {
+        SharedPreferences prefs = context.getSharedPreferences(TransactionActivity.CURRENCY_PREFS, Context.MODE_PRIVATE);
+        String currencyPref = prefs.getString(TransactionActivity.CURRENCY, null);
+        if(currencyPref != null) {
+            return currencyPref;
+        }else{
+            String defaultCurrency = context.getString(R.string.defaultCurrency);
+            return defaultCurrency;
+        }
+    }
+
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.logs_row_layout, parent, false);
@@ -43,7 +55,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
         final Transaction transaction = arrayList.get(position);
         holder.name.setText(transaction.getName());
         holder.date.setText(transaction.getDate());
-        holder.price.setText(String.valueOf(transaction.getMoney()));
+        holder.price.setText(transaction.getMoney().toPlainString());
+        holder.currency.setText(getCurrency());
         if(transaction.getMoney().compareTo(BigDecimal.ZERO) == 1) {
             holder.imgView.setImageResource(R.drawable.tr_plus);
             holder.line.setBackgroundColor(ContextCompat.getColor(context, R.color.colorTrPlus));
@@ -67,6 +80,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
                 TextView descrTV = (TextView) view.findViewById(R.id.descrTV);
                 TextView dateTV = (TextView) view.findViewById(R.id.dateTV);
                 TextView moneyTV = (TextView) view.findViewById(R.id.moneyTV);
+                TextView currencyTV = (TextView) view.findViewById(R.id.currencyTV);
                 Transaction transaction = arrayList.get(position);
                 BigDecimal money = transaction.getMoney();
                 if (money.compareTo(BigDecimal.ZERO) == 1) {
@@ -80,6 +94,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
                 descrTV.setText("Description : " + transaction.getDescription());
                 dateTV.setText("Date : " + transaction.getDate());
                 moneyTV.setText("Sum : " + money.toPlainString());
+                currencyTV.setText(getCurrency());
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setCancelable(true);
                 builder.setView(view);
@@ -149,7 +164,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
 
     public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
-        TextView name, date, price;
+        TextView name, date, price, currency;
         ImageView imgView;
         ImageButton editPencil;
         View line;
@@ -162,6 +177,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
             imgView = (ImageView) view.findViewById(R.id.transaction_img);
             editPencil = (ImageButton) view.findViewById(R.id.editPencil);
             line = view.findViewById(R.id.lineSeparator);
+            currency = (TextView) view.findViewById(R.id.transaction_currency);
         }
     }
 }

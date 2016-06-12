@@ -1,7 +1,5 @@
 package org.elsys.valiolucho.businessmonefy;
 
-import android.util.Log;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 
