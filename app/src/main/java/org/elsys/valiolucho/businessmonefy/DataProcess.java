@@ -21,6 +21,24 @@ public class DataProcess {
         this.data = data;
     }
 
+    public DataProcess getFilteredData(String type) {
+        ArrayList<Transaction> newData = new ArrayList<>();
+        if("pos".equals(type)) {
+            for (Transaction transaction: data) {
+                if(transaction.getMoney().compareTo(BigDecimal.ZERO) == 1) {
+                    newData.add(transaction);
+                }
+            }
+        }else{
+            for (Transaction transaction: data) {
+                if(transaction.getMoney().compareTo(BigDecimal.ZERO) == -1) {
+                    newData.add(transaction);
+                }
+            }
+        }
+        return new DataProcess(newData, period);
+    }
+
     public BigDecimal getIncomings() {
         BigDecimal incomingSum = BigDecimal.ZERO;
         for (Transaction transaction : data) {
@@ -41,24 +59,6 @@ public class DataProcess {
             }
         }
         return outcomingSum.setScale(2, BigDecimal.ROUND_HALF_EVEN).stripTrailingZeros();
-    }
-
-    public float[] getMinusVals() {
-        ArrayList<BigDecimal> nums = new ArrayList<>();
-        int index = 0;
-        for (Transaction transaction : data) {
-            transaction = data.get(index);
-            if(transaction.getMoney().compareTo(BigDecimal.ZERO) == -1) {
-                nums.add(transaction.getMoney());
-                labels[index] = transaction.getName();
-            }
-            index++;
-        }
-        float[] floatNums = new float[nums.size()];
-        for (int i = 0; i < nums.size(); i++) {
-            floatNums[i] = nums.get(i).floatValue();
-        }
-        return floatNums;
     }
 
     private void setValues() {

@@ -78,7 +78,7 @@ public class GraphicsActivity extends FragmentActivity {
                     toDate = myDate.getCurrentDateTime();
                     arrayList = myDbHelper.getSpecificData(ORDER, fromDate, toDate);
                     period = "today";
-                    chartsSwipeAdapter = new ChartsSwipeAdapter(getSupportFragmentManager(), arrayList, period);
+                    chartsSwipeAdapter = new ChartsSwipeAdapter(getSupportFragmentManager(), arrayList, period, getApplicationContext());
                     viewPager.setAdapter(chartsSwipeAdapter);
                 }else if(itemText.equals(periodNames[1])) {
                     fromDate = myDate.getPreviousDateTime(toDate, "yesterday");
@@ -86,33 +86,33 @@ public class GraphicsActivity extends FragmentActivity {
                     toDate = myDate.getPreviousDateTime(toDate, "endDay");
                     arrayList = myDbHelper.getSpecificData(ORDER, fromDate, toDate);
                     period = "yesterday";
-                    chartsSwipeAdapter = new ChartsSwipeAdapter(getSupportFragmentManager(), arrayList, period);
+                    chartsSwipeAdapter = new ChartsSwipeAdapter(getSupportFragmentManager(), arrayList, period, getApplicationContext());
                     viewPager.setAdapter(chartsSwipeAdapter);
                 }else if(itemText.equals(periodNames[2])) {
                     fromDate = myDate.getPreviousDateTime(toDate, "week");
                     toDate = myDate.getCurrentDateTime();
                     arrayList = myDbHelper.getSpecificData(ORDER, fromDate, toDate);
                     period = "week";
-                    chartsSwipeAdapter = new ChartsSwipeAdapter(getSupportFragmentManager(), arrayList, period);
+                    chartsSwipeAdapter = new ChartsSwipeAdapter(getSupportFragmentManager(), arrayList, period, getApplicationContext());
                     viewPager.setAdapter(chartsSwipeAdapter);
                 }else if(itemText.equals(periodNames[3])) {
                     fromDate = myDate.getPreviousDateTime(toDate, "month");
                     toDate = myDate.getCurrentDateTime();
                     arrayList = myDbHelper.getSpecificData(ORDER, fromDate, toDate);
                     period = "month";
-                    chartsSwipeAdapter = new ChartsSwipeAdapter(getSupportFragmentManager(), arrayList, period);
+                    chartsSwipeAdapter = new ChartsSwipeAdapter(getSupportFragmentManager(), arrayList, period, getApplicationContext());
                     viewPager.setAdapter(chartsSwipeAdapter);
                 }else if(itemText.equals(periodNames[4])) {
                     fromDate = myDate.getPreviousDateTime(toDate, "year");
                     toDate = myDate.getCurrentDateTime();
                     arrayList = myDbHelper.getSpecificData(ORDER, fromDate, toDate);
                     period = "year";
-                    chartsSwipeAdapter = new ChartsSwipeAdapter(getSupportFragmentManager(), arrayList, period);
+                    chartsSwipeAdapter = new ChartsSwipeAdapter(getSupportFragmentManager(), arrayList, period, getApplicationContext());
                     viewPager.setAdapter(chartsSwipeAdapter);
                 }else if(itemText.equals(periodNames[5])) {
                     arrayList = myDbHelper.getAllData(ORDER);
                     period = "all";
-                    chartsSwipeAdapter = new ChartsSwipeAdapter(getSupportFragmentManager(), arrayList, period);
+                    chartsSwipeAdapter = new ChartsSwipeAdapter(getSupportFragmentManager(), arrayList, period, getApplicationContext());
                     viewPager.setAdapter(chartsSwipeAdapter);
                 }else{
                     datepickerManager();
@@ -168,7 +168,7 @@ public class GraphicsActivity extends FragmentActivity {
                 fromDate = fromDateTV.getText().toString();
                 toDate = toDateTV.getText().toString();
                 arrayList = myDbHelper.getSpecificData(ORDER, fromDate, toDate);
-                chartsSwipeAdapter = new ChartsSwipeAdapter(getSupportFragmentManager(), arrayList, "");
+                chartsSwipeAdapter = new ChartsSwipeAdapter(getSupportFragmentManager(), arrayList, "", getApplicationContext());
                 viewPager.setAdapter(chartsSwipeAdapter);
                 dialog.dismiss();
             }

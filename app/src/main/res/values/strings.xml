@@ -79,4 +79,8 @@
         <item>EUR</item>
         <item>GBP</item>
     </string-array>
+
+    <string name="outAndIncoms">Incomings and outcomings (+ / -)</string>
+    <string name="incoms">Incomings (+)</string>
+    <string name="outcoms">Outcomings (-)</string>
 </resources>
