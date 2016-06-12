@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
@@ -23,10 +24,11 @@ import android.widget.TextView;
 
 import org.joda.time.DateTime;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class LogsActivity extends AppCompatActivity {
+public class LogsActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener{
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter recyclerAdapter;
@@ -38,6 +40,7 @@ public class LogsActivity extends AppCompatActivity {
     private String order = "DESC";
     private String toDate;
     private String fromDate;
+    private TabLayout tabLayout;
 
     @Override
     protected void onDestroy() {
@@ -61,22 +64,12 @@ public class LogsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_logs);
-        ActionBar actionBar = getSupportActionBar();
-        if(actionBar != null) {
-            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-            ActionBar.TabListener tabListener = new ActionBar.TabListener() {
-                public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
-
-                }
-
-                public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
-
-                }
-
-                public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
-                    //ignore
-                }
-            };
+        tabLayout = (TabLayout) findViewById(R.id.logsTabs);
+        if(tabLayout != null) {
+            tabLayout.addTab(tabLayout.newTab().setText("All"));
+            tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.tr_plus));
+            tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.tr_minus));
+            tabLayout.setOnTabSelectedListener(this);
         }
         myDbHelper = DataBaseHelper.getInstance(getApplicationContext());
         recyclerView = (RecyclerView) findViewById(R.id.logsRecyclerView);
@@ -86,7 +79,46 @@ public class LogsActivity extends AppCompatActivity {
         spinner = (Spinner) findViewById(R.id.spinnerLogs);
         spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.periodNames, android.R.layout.simple_spinner_item);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setPopupBackgroundDrawable(ContextCompat.getDrawable(this, R.color.lightGreen));
         spinnerManager();
+    }
+
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        ArrayList<Transaction> newArrList = new ArrayList<>();
+        if(tabLayout.getSelectedTabPosition() == 0){
+            recyclerAdapter = new RecyclerAdapter(arrayList, LogsActivity.this);
+            recyclerView.setAdapter(recyclerAdapter);
+            swipeToDismiss();
+        }else if(tabLayout.getSelectedTabPosition() == 1){
+            for (Transaction transaction : arrayList) {
+                if(transaction.getMoney().compareTo(BigDecimal.ZERO) == 1) {
+                    newArrList.add(transaction);
+                }
+            }
+            recyclerAdapter = new RecyclerAdapter(newArrList, LogsActivity.this);
+            recyclerView.setAdapter(recyclerAdapter);
+            swipeToDismiss();
+        }else if(tabLayout.getSelectedTabPosition() == 2){
+            for (Transaction transaction : arrayList) {
+                if(transaction.getMoney().compareTo(BigDecimal.ZERO) == -1) {
+                    newArrList.add(transaction);
+                }
+            }
+            recyclerAdapter = new RecyclerAdapter(newArrList, LogsActivity.this);
+            recyclerView.setAdapter(recyclerAdapter);
+            swipeToDismiss();
+        }
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+
     }
 
     private void orderDialog() {
@@ -110,20 +142,6 @@ public class LogsActivity extends AppCompatActivity {
     }
 
     private void spinnerManager() {
-        spinner.setPopupBackgroundDrawable(ContextCompat.getDrawable(this, R.color.lightGreen));
-        spinner.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                orderDialog();
-                if(arrayList != null) {
-                    Collections.reverse(arrayList);
-                    recyclerAdapter.notifyDataSetChanged();
-                    return true;
-                }
-                return false;
-            }
-        });
-
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -183,6 +201,18 @@ public class LogsActivity extends AppCompatActivity {
             }
         });
         spinner.setAdapter(spinnerAdapter);
+        spinner.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                orderDialog();
+                if(arrayList != null) {
+                    Collections.reverse(arrayList);
+                    recyclerAdapter.notifyDataSetChanged();
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     private void swipeToDismiss() {

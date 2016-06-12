@@ -65,4 +65,16 @@ public class ChartsSwipeAdapter extends FragmentStatePagerAdapter {
     public int getCount() {
         return 3;
     }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        switch (position) {
+            case 0:
+                return "ALL";
+            case 1:
+                return "Incomings";
+            default:
+                return "Outcomings";
+        }
+    }
 }

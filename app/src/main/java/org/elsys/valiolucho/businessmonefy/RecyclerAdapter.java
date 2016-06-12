@@ -127,7 +127,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.Recycl
         }else {
             title.setBackgroundColor(ContextCompat.getColor(context, R.color.lightRed));
         }
-        moneyTV.setText(String.valueOf(oldTransaction.getMoney()));
+        moneyTV.setText(oldTransaction.getMoney().toPlainString());
 
         builder.setView(view)
                 .setPositiveButton(R.string.saveED, new DialogInterface.OnClickListener() {

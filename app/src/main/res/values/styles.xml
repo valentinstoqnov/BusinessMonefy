@@ -11,6 +11,14 @@
         <item name="colorAccent">@color/colorAccent</item>-->
     </style>
 
+    <style name="MyMaterialTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="colorPrimary">#4CAF50</item>
+        <item name="colorPrimaryDark">#2E7D32</item>
+        <item name="colorAccent">@color/yellow</item>
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

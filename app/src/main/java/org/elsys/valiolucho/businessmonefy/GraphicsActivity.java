@@ -5,6 +5,8 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -32,6 +34,7 @@ public class GraphicsActivity extends FragmentActivity {
     private String toDate;
     private static final String ORDER = "ASC";
     private ChartsSwipeAdapter chartsSwipeAdapter;
+    private TabLayout tabLayout;
 
     @Override
     protected void onDestroy() {
@@ -57,6 +60,7 @@ public class GraphicsActivity extends FragmentActivity {
         setContentView(R.layout.activity_graphics);
         myDbHelper = DataBaseHelper.getInstance(getApplicationContext());
         viewPager = (ViewPager) findViewById(R.id.viewPager);
+        tabLayout = (TabLayout) findViewById(R.id.graphicsTabs);
         spinner = (Spinner) findViewById(R.id.spinnerGraphs);
         spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.periodNames, android.R.layout.simple_spinner_item);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -80,6 +84,9 @@ public class GraphicsActivity extends FragmentActivity {
                     period = "today";
                     chartsSwipeAdapter = new ChartsSwipeAdapter(getSupportFragmentManager(), arrayList, period, getApplicationContext());
                     viewPager.setAdapter(chartsSwipeAdapter);
+                    if(tabLayout != null) {
+                        tabLayout.setupWithViewPager(viewPager);
+                    }
                 }else if(itemText.equals(periodNames[1])) {
                     fromDate = myDate.getPreviousDateTime(toDate, "yesterday");
                     toDate = fromDate;
