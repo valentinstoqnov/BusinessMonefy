@@ -77,7 +77,6 @@
         <item>USD</item>
         <item>BGN</item>
         <item>EUR</item>
-        <item>GBP</item>
     </string-array>
 
     <string name="outAndIncoms">Incomings and outcomings (+ / -)</string>
